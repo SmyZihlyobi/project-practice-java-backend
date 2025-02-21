@@ -3,6 +3,7 @@ package xyz.demorgan.projectpractice.service;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
@@ -22,6 +23,7 @@ public class CompanyService {
     CompanyMapper companyMapper;
     CompanyRepository companyRepository;
 
+    @Cacheable(value = "companies", key = "'all_companies'")
     public List<CompanyDto> getAll() {
         log.info("Getting all companies at {}", System.currentTimeMillis());
         return companyRepository.findAll()

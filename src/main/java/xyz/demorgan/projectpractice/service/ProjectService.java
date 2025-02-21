@@ -3,6 +3,7 @@ package xyz.demorgan.projectpractice.service;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
@@ -22,6 +23,7 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
     ProjectRepository projectRepository;
 
+    @Cacheable(value = "projects", key = "'all_projects'")
     public List<ProjectDto> getAll() {
         log.info("Getting all projects at {}", System.currentTimeMillis());
         return projectRepository.findAll()
