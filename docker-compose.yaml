@@ -16,6 +16,7 @@ services:
       retries: 5
     depends_on:
       - postgres
+      - redis
 
   postgres:
     image: postgres:17.3
@@ -68,6 +69,18 @@ services:
       retries: 5
     depends_on:
       - postgres
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
 volumes:
   postgres_data:
