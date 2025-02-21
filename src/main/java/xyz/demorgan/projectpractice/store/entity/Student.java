@@ -59,7 +59,7 @@ public class Student implements Serializable {
     @Column(name = "resume_link")
     String resumeLink;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 
     @ManyToOne

@@ -24,16 +24,16 @@ public class Company implements Serializable {
     @Column(name = "name", nullable = false)
     String name;
 
-    @Column(name = "representative")
+    @Column(name = "representative", nullable = false)
     String representative;
 
-    @Column(name = "contacts")
+    @Column(name = "contacts", nullable = false)
     String contacts;
 
-    @Column(name = "is_student_company", columnDefinition = "boolean default false")
+    @Column(name = "is_student_company", columnDefinition = "boolean default false", nullable = false)
     boolean isStudentCompany;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

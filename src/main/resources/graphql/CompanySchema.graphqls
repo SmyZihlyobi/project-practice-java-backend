@@ -1,0 +1,21 @@
+type Company {
+    id: ID!
+    name: String!
+    representative: String!
+    contacts: String!
+    isStudentCompany: Boolean!
+    createdAt: String!
+    projects: [Project!]!
+}
+
+input CompanyInput {
+    name: String!
+    representative: String!
+    contacts: String!
+    isStudentCompany: Boolean!
+}
+
+extend type Query {
+    company(id: ID!): Company
+    companies: [Company!]!
+}
