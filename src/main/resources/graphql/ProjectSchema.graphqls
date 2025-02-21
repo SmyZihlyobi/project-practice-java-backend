@@ -1,0 +1,27 @@
+type Project {
+    id: ID!
+    name: String!
+    description: String!
+    stack: String!
+    teamsAmount: Int!
+    technicalSpecifications: String
+    presentation: String
+    isStudentProject: Boolean!
+    createdAt: String!
+    updatedAt: String!
+}
+
+input ProjectInput {
+    name: String!
+    description: String!
+    stack: String!
+    teamsAmount: Int!
+    technicalSpecifications: String
+    presentation: String
+    isStudentProject: Boolean!
+}
+
+extend type Query {
+    project(id: ID!): Project
+    projects: [Project!]!
+}

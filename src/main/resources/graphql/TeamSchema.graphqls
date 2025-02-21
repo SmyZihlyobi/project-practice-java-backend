@@ -1,0 +1,10 @@
+type Team {
+    id: ID!
+    name: String!
+    students: [Student!]!
+}
+
+extend type Query {
+    team(id: ID!): Team
+    teams: [Team!]!
+}

@@ -1,0 +1,38 @@
+type Student {
+    id: ID!
+    team_name: String!
+    group_id: String!
+    year: Int!
+    lastName: String!
+    firstName: String!
+    patronymic: String!
+    firstPriority: Int!
+    secondPriority: Int!
+    thirdPriority: Int!
+    otherPriorities: String
+    telegram: String
+    resumePdf: String
+    resumeLink: String
+    createdAt: String!
+}
+
+input StudentInput {
+    team_name: String!
+    group_id: String!
+    year: Int!
+    lastName: String!
+    firstName: String!
+    patronymic: String!
+    firstPriority: Int!
+    secondPriority: Int!
+    thirdPriority: Int!
+    otherPriorities: String
+    telegram: String
+    resumePdf: String
+    resumeLink: String
+}
+
+type Query {
+    student(id: ID!): Student
+    students: [Student!]!
+}
