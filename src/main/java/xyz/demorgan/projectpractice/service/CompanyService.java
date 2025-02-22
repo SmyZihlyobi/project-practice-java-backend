@@ -4,11 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
+import xyz.demorgan.projectpractice.exceptions.LoginException;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
+import xyz.demorgan.projectpractice.store.dto.LoginAnswer;
 import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 import xyz.demorgan.projectpractice.store.entity.Company;
 import xyz.demorgan.projectpractice.store.mapper.CompanyMapper;
 import xyz.demorgan.projectpractice.store.repos.CompanyRepository;
@@ -28,6 +37,8 @@ public class CompanyService {
     CompanyMapper companyMapper;
     PasswordEncoder passwordEncoder;
     CompanyRepository companyRepository;
+    AuthenticationManager authenticationManager;
+    JwtTokenUtils jwtTokenUtils;
 
     @Cacheable(value = "companies", key = "'all_companies'")
     public List<CompanyDto> getAll() {
@@ -80,5 +91,23 @@ public class CompanyService {
             password.append(chars.charAt(random.nextInt(chars.length())));
         }
         return password.toString();
+    }
+
+    public ResponseEntity<?> login(CompanyLoginDto companyLoginDto) {
+        log.info("User login by email: {}", companyLoginDto.getEmail());
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(companyLoginDto.getEmail(), companyLoginDto.getPassword()));
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(new LoginException(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"), HttpStatus.UNAUTHORIZED);
+        }
+
+        log.info("User {} authenticated", companyLoginDto.getEmail());
+        Company user = companyRepository.findByEmail(companyLoginDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + companyLoginDto.getEmail()));
+
+        String token = jwtTokenUtils.generateToken(user);
+
+        return ResponseEntity.ok(new LoginAnswer(token));
     }
 }

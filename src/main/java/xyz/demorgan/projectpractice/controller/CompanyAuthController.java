@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
 import xyz.demorgan.projectpractice.service.CompanyService;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 import xyz.demorgan.projectpractice.store.repos.CompanyRepository;
 
 @AllArgsConstructor
@@ -36,7 +38,7 @@ public class CompanyAuthController {
     }
 
     @PostMapping(LOGIN)
-    public void login(@RequestBody CompanyLoginDto companyLoginDto) {
-        companyService.approveCompany(companyId);
+    public ResponseEntity<?> login(@RequestBody CompanyLoginDto companyLoginDto) {
+        return companyService.login(companyLoginDto);
     }
 }
