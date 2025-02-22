@@ -19,3 +19,8 @@ extend type Query {
     company(id: ID!): Company
     companies: [Company!]!
 }
+
+type Mutation {
+    createCompany(input: CompanyInput!): Company
+    deleteCompany(id: ID!): Company
+}

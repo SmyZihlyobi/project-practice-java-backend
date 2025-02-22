@@ -36,3 +36,8 @@ type Query {
     student(id: ID!): Student
     students: [Student!]!
 }
+
+extend type Mutation {
+    createStudent(input: StudentInput!): Student
+    deleteStudent(id: ID!): Student
+}
