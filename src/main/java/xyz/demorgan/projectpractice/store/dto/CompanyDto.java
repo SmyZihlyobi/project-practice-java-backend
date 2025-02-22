@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.store.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class CompanyDto {
     @NotEmpty
     @NotBlank
     private String contacts;
+    @JsonProperty("isStudentCompany")
     private boolean studentCompany;
     @NotNull
     private LocalDateTime createdAt;

@@ -37,7 +37,7 @@ public class Project implements Serializable {
     String presentation;
 
     @Column(name = "is_student_project", columnDefinition = "boolean default false", nullable = false)
-    boolean isStudentProject;
+    boolean studentProject;
 
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;

@@ -33,7 +33,7 @@ public class ProjectDto {
     private int teamsAmount;
     private String technicalSpecifications;
     private String presentation;
-    private boolean isStudentProject;
+    private boolean studentProject;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

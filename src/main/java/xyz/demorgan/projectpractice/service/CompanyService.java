@@ -5,7 +5,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
-import xyz.demorgan.projectpractice.exceptions.LoginException;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
 import xyz.demorgan.projectpractice.store.dto.LoginAnswer;
@@ -42,7 +40,6 @@ public class CompanyService {
     AuthenticationManager authenticationManager;
     JwtTokenUtils jwtTokenUtils;
 
-    @Cacheable(value = "companies", key = "'all_companies'")
     public List<CompanyDto> getAll() {
         log.info("Getting all companies at {}", System.currentTimeMillis());
         return companyRepository.findAll()
@@ -57,7 +54,6 @@ public class CompanyService {
                 .orElseThrow(() -> new NotFound("Company with id " + id + " not found")));
     }
 
-    @CacheEvict(value = "companies", allEntries = true)
     public Company create(CompanyInputDto companyInputDto) {
         log.info("Creating company at {}", System.currentTimeMillis());
         Company company = companyMapper.toEntity(companyInputDto);
@@ -65,7 +61,6 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    @CacheEvict(value = "companies", allEntries = true)
     public CompanyDto delete(Long id) {
         log.info("Deleting company with id: {} at {}", id, System.currentTimeMillis());
         Company company = companyRepository.findById(id)

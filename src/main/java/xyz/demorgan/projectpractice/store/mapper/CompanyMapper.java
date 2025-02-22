@@ -14,6 +14,7 @@ public interface CompanyMapper {
         company.getProjects().forEach(project -> project.setCompany(company));
     }
 
+    @Mapping(target = "studentCompany", expression = "java(company.isStudentCompany())")
     CompanyDto toCompanyDto(Company company);
 
     Company toEntity(CompanyInputDto companyInputDto);
