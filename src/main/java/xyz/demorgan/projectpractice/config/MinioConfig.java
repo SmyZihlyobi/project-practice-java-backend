@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.net.ssl.SSLContext;
+import java.net.http.HttpClient;
+import java.security.NoSuchAlgorithmException;
+
 @Configuration
 public class MinioConfig {
     @Value("${minio.endpoint}")
@@ -57,7 +61,7 @@ public class MinioConfig {
     @Bean
     public boolean initializeTechnicalSpecificationsBucket(MinioClient minioClient) {
         try {
-            String bucketName = "technical_specifications";
+            String bucketName = "technical-specifications";
             boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (!isExist) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
