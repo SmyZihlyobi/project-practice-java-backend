@@ -7,9 +7,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
+import xyz.demorgan.projectpractice.store.entity.Company;
 import xyz.demorgan.projectpractice.store.mapper.CompanyMapper;
 import xyz.demorgan.projectpractice.store.repos.CompanyRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,5 +39,20 @@ public class CompanyService {
         log.info("Getting company with id: {} at {}", id, System.currentTimeMillis());
         return companyMapper.toCompanyDto(companyRepository.findById(id)
                 .orElseThrow(() -> new NotFound("Company with id " + id + " not found")));
+    }
+
+    public Company create(CompanyInputDto companyInputDto) {
+        log.info("Creating company at {}", System.currentTimeMillis());
+        Company company = companyMapper.toEntity(companyInputDto);
+        company.setCreatedAt(LocalDateTime.now());
+        return companyRepository.save(company);
+    }
+
+    public CompanyDto delete(Long id) {
+        log.info("Deleting company with id: {} at {}", id, System.currentTimeMillis());
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Company with id " + id + " not found"));
+        companyRepository.delete(company);
+        return companyMapper.toCompanyDto(company);
     }
 }

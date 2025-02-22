@@ -1,6 +1,7 @@
 package xyz.demorgan.projectpractice.store.mapper;
 
 import org.mapstruct.*;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
 import xyz.demorgan.projectpractice.store.entity.Company;
 
@@ -14,4 +15,8 @@ public interface CompanyMapper {
     }
 
     CompanyDto toCompanyDto(Company company);
+
+    Company toEntity(CompanyInputDto companyInputDto);
+
+    CompanyInputDto toCompanyInputDto(Company company);
 }
