@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,12 @@ public class Company implements Serializable {
     @Column(name = "contacts", nullable = false)
     String contacts;
 
+    @Column(name = "email", nullable = false)
+    String email;
+
+    @Column(name = "password")
+    String password;
+
     @Column(name = "is_student_company", columnDefinition = "boolean default false", nullable = false)
     boolean isStudentCompany;
 
@@ -37,5 +44,5 @@ public class Company implements Serializable {
     LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Project> projects;
+    List<Project> projects = new ArrayList<>();;
 }

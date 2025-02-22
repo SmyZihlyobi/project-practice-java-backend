@@ -3,6 +3,7 @@ type Company {
     name: String!
     representative: String!
     contacts: String!
+    email: String!
     isStudentCompany: Boolean!
     createdAt: String!
     projects: [Project!]!
@@ -11,6 +12,7 @@ type Company {
 input CompanyInput {
     name: String!
     representative: String!
+    email: String!
     contacts: String!
     isStudentCompany: Boolean!
 }

@@ -17,6 +17,4 @@ public interface CompanyMapper {
     CompanyDto toCompanyDto(Company company);
 
     Company toEntity(CompanyInputDto companyInputDto);
-
-    CompanyInputDto toCompanyInputDto(Company company);
 }

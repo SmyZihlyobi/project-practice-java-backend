@@ -14,5 +14,6 @@ public class CompanyInputDto {
     private String name;
     private String representative;
     private String contacts;
+    private String email;
     private boolean isStudentCompany;
 }

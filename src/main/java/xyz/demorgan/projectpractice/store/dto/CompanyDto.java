@@ -22,6 +22,7 @@ public class CompanyDto {
     @NotEmpty
     @NotBlank
     private String name;
+    private String email;
     @NotNull
     @NotEmpty
     @NotBlank
