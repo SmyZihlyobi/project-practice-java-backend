@@ -3,12 +3,14 @@ package xyz.demorgan.projectpractice.service;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
@@ -55,6 +57,7 @@ public class CompanyService {
                 .orElseThrow(() -> new NotFound("Company with id " + id + " not found")));
     }
 
+    @CacheEvict(value = "companies", allEntries = true)
     public Company create(CompanyInputDto companyInputDto) {
         log.info("Creating company at {}", System.currentTimeMillis());
         Company company = companyMapper.toEntity(companyInputDto);
@@ -62,6 +65,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
+    @CacheEvict(value = "companies", allEntries = true)
     public CompanyDto delete(Long id) {
         log.info("Deleting company with id: {} at {}", id, System.currentTimeMillis());
         Company company = companyRepository.findById(id)
@@ -97,9 +101,21 @@ public class CompanyService {
         log.info("User login by email: {}", companyLoginDto.getEmail());
 
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(companyLoginDto.getEmail(), companyLoginDto.getPassword()));
+            log.debug("Attempting authentication...");
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            companyLoginDto.getEmail(),
+                            companyLoginDto.getPassword()
+                    )
+            );
+            log.info("Authentication result: {}", auth.isAuthenticated());
+
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new LoginException(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"), HttpStatus.UNAUTHORIZED);
+            log.error("Authentication failed: {}", e.getMessage());
+            return ResponseEntity.status(401).body("Invalid credentials");
+        } catch (Exception e) {
+            log.error("Unexpected error: ", e);
+            return ResponseEntity.internalServerError().build();
         }
 
         log.info("User {} authenticated", companyLoginDto.getEmail());

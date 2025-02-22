@@ -37,8 +37,8 @@ public class Company implements Serializable {
     @Column(name = "password")
     String password;
 
-    @Column(name = "is_student_company", columnDefinition = "boolean default false", nullable = false)
-    boolean isStudentCompany;
+    @Column(name = "student_company", columnDefinition = "boolean default false", nullable = false)
+    boolean studentCompany;
 
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;

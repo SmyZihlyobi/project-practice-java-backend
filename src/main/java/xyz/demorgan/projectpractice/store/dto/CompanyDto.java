@@ -31,7 +31,7 @@ public class CompanyDto {
     @NotEmpty
     @NotBlank
     private String contacts;
-    private boolean isStudentCompany;
+    private boolean studentCompany;
     @NotNull
     private LocalDateTime createdAt;
     private List<ProjectDto> projects;
