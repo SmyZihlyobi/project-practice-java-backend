@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
@@ -31,6 +32,11 @@ public class CompanyAuthController {
 
     @PostMapping(APPROVE_COMPANY)
     public void approveCompany(@RequestParam Long companyId) {
+        companyService.approveCompany(companyId);
+    }
+
+    @PostMapping(LOGIN)
+    public void login(@RequestBody CompanyLoginDto companyLoginDto) {
         companyService.approveCompany(companyId);
     }
 }

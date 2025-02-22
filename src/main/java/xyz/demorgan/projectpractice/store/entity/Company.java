@@ -43,6 +43,9 @@ public class Company implements Serializable {
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    String role = "ROLE_COMPANY";
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Project> projects = new ArrayList<>();;
 }

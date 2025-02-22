@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.getEmail(),
                 user.getPassword(),
-                Stream.of("ROLE_COMPANY")
+                Stream.of(user.getRole())
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList())
         );
