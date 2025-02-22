@@ -31,7 +31,7 @@ public class Company implements Serializable {
     @Column(name = "contacts", nullable = false)
     String contacts;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     String email;
 
     @Column(name = "password")
