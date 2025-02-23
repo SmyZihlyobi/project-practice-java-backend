@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -44,7 +45,7 @@ public class Company implements Serializable {
     LocalDateTime createdAt;
 
     @Column(nullable = false)
-    String role = "ROLE_COMPANY";
+    List<String> role = Collections.singletonList("ROLE_COMPANY");
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Project> projects = new ArrayList<>();;

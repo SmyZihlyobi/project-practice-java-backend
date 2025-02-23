@@ -1,5 +1,7 @@
 package xyz.demorgan.projectpractice.config.jwt;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -19,7 +21,7 @@ public class JwtTokenUtils {
     public String generateToken(Company company) {
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("roles", company.getRole());
+        claims.put("role", company.getRole());
         claims.put("id", company.getId());
         claims.put("email", company.getEmail());
         claims.put("name", company.getName());
@@ -27,7 +29,6 @@ public class JwtTokenUtils {
 
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + lifetime.toMillis());
-
 
         return Jwts.builder()
                 .subject(company.getEmail())
@@ -40,22 +41,52 @@ public class JwtTokenUtils {
     }
 
     public String getEmailFromToken(String token) {
-        return Objects.requireNonNull(getAllClaimsFromToken(token)).getSubject();
+        Claims claims = getAllClaimsFromToken(token);
+        if (claims == null) {
+            throw new JwtException("Problem while getting email from token");
+        }
+        return claims.getSubject();
     }
 
-    public String getIdFromToken(String token) {
-        return Objects.requireNonNull(getAllClaimsFromToken(token)).get("id", String.class);
+    public Integer getIdFromToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        if (claims == null) {
+            throw new JwtException("Invalid token");
+        }
+        return claims.get("id", Integer.class);
     }
 
     public List<String> getRolesFromToken(String token) {
-        return getAllClaimsFromToken(token).get("roles", List.class);
+        Claims claims = getAllClaimsFromToken(token);
+        if (claims == null) {
+            throw new JwtException("Invalid token");
+        }
+
+
+        List<?> rolesList = claims.get("roles", List.class);
+
+        if (rolesList == null) {
+            return Collections.emptyList();
+        }
+
+        List<String> roles = new ArrayList<>();
+        for (Object roleObj : rolesList) {
+            if (roleObj instanceof String) {
+                roles.add((String) roleObj);
+            } else {
+                throw new JwtException("Role is not a String");
+            }
+        }
+
+        return roles;
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        try {return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token).getPayload();
+        try {
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token).getPayload();
         } catch (JwtException e) {
             return null;
         }

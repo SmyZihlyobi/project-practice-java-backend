@@ -15,7 +15,6 @@ import xyz.demorgan.projectpractice.store.entity.Company;
 import xyz.demorgan.projectpractice.store.repos.CompanyRepository;
 
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +31,8 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.getEmail(),
                 user.getPassword(),
-                Stream.of(user.getRole())
+                user.getRole()
+                        .stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList())
         );

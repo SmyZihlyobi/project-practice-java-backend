@@ -8,6 +8,7 @@ public class ProjectInputDto {
     String description;
     String url;
     int teamsAmount;
+    String stack;
     String technicalSpecifications;
     Long presentation;
     boolean studentProject;
