@@ -3,8 +3,6 @@ package xyz.demorgan.projectpractice.config.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import xyz.demorgan.projectpractice.store.entity.Company;
 
