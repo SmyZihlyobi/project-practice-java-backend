@@ -43,13 +43,9 @@ minio:
   root-user: ${MINIO_ROOT_USER:demorgan}
   root-password: ${MINIO_ROOT_PASSWORD:password}
 
-jwt:
-  lifetime: 30m
-
-brevo:
-  smtp:
-    username: 866a4e001@smtp-brevo.com
-    password: kE3IqP5nWaZfwmV0
+springdoc:
+  swagger-ui:
+    path: /docs
 
 logging:
   level:
