@@ -3,6 +3,7 @@ package xyz.demorgan.projectpractice.controller;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import xyz.demorgan.projectpractice.service.TeamService;
@@ -26,5 +27,10 @@ public class TeamController {
     @QueryMapping
     public TeamDto team(@Argument Long id) {
         return teamService.getById(id);
+    }
+
+    @MutationMapping
+    public void deleteTeam(@Argument Long id) {
+        teamService.deleteTeam(id);
     }
 }

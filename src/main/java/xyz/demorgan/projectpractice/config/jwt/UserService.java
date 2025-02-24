@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.getEmail(),
                 user.getPassword(),
-                user.getRole()
+                user.getRoles()
                         .stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList())

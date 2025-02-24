@@ -3,11 +3,15 @@ package xyz.demorgan.projectpractice.store.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
+import xyz.demorgan.projectpractice.store.dto.StudentDto;
+import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
 import xyz.demorgan.projectpractice.store.entity.Student;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface StudentMapper {
-    Student toEntity(xyz.demorgan.projectpractice.store.dto.StudentDto studentDto);
+    Student toEntity(StudentDto studentDto);
 
-    xyz.demorgan.projectpractice.store.dto.StudentDto toStudentDto(Student student);
+   StudentDto toStudentDto(Student student);
+
+   Student toEntity(StudentInputDto studentInputDto);
 }
