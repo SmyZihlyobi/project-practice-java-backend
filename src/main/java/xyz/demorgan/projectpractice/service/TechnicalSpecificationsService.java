@@ -35,14 +35,14 @@ public class TechnicalSpecificationsService {
                     .builder()
                     .bucket("technical-specifications")
                     .object(file.getOriginalFilename().replaceAll(" ", "").trim())
-                    .stream(Files.newInputStream(Paths.get(file.getOriginalFilename())), file.getSize(), -1)
+                    .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
 
             Project project = projectRepository.findById(projectId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project with this id not found"));
 
-            project.setTechnicalSpecifications(file.getOriginalFilename().replaceAll(" ", "").trim());
+            project.setTechnicalSpecifications(file.getOriginalFilename().replaceAll(" ", "_").trim());
 
             projectRepository.save(project);
 

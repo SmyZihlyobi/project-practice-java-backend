@@ -35,14 +35,16 @@ public class ResumeService {
                     .builder()
                     .bucket("resume")
                     .object(file.getOriginalFilename().replaceAll(" ", "").trim())
-                    .stream(Files.newInputStream(Paths.get(file.getOriginalFilename())), file.getSize(), -1)
+                    .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
 
             Student student = studentRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with this id not found"));
 
-            student.setResumePdf(file.getOriginalFilename().replaceAll(" ", "").trim());
+            student.setResumePdf(file.getOriginalFilename().replaceAll(" ", "_").trim());
+
+            studentRepository.save(student);
 
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "File uploaded successfully");
@@ -78,6 +80,11 @@ public class ResumeService {
                     .build();
 
             minioClient.removeObject(removeObjectArgs);
+
+            Student student = studentRepository.findByResumePdf(fileName);
+            student.setResumePdf("");
+            studentRepository.save(student);
+
             return ResponseEntity.ok().body("File deleted successfully");
         } catch (Exception e) {
             log.error("Error deleting file", e);

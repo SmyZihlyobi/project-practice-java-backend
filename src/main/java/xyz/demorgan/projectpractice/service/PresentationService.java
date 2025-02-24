@@ -34,7 +34,7 @@ public class PresentationService {
             minioClient.putObject(PutObjectArgs
                     .builder()
                     .bucket("presentation")
-                    .object(file.getOriginalFilename().replaceAll(" ", "").trim())
+                    .object(file.getOriginalFilename().replaceAll(" ", "_").trim())
                     .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
