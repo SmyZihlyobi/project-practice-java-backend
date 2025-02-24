@@ -10,8 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import xyz.demorgan.projectpractice.store.entity.Project;
 import xyz.demorgan.projectpractice.store.entity.Student;
-import xyz.demorgan.projectpractice.store.repos.StudentRepository;
+import xyz.demorgan.projectpractice.store.repos.ProjectRepository;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -22,27 +23,26 @@ import java.util.HashMap;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 @Slf4j
-public class ResumeService {
+public class PresentationService {
     MinioClient minioClient;
-    StudentRepository studentRepository;
+    ProjectRepository projectRepository;
     FileValidateService fileValidateService;
-
-    public ResponseEntity<?> uploadResume(Long userId, MultipartFile file) {
+    public ResponseEntity<?> uploadPresentation(Long projectId, MultipartFile file) {
         fileValidateService.validateFile(file);
 
         try {
             minioClient.putObject(PutObjectArgs
                     .builder()
-                    .bucket("resume")
+                    .bucket("presentation")
                     .object(file.getOriginalFilename().replaceAll(" ", "").trim())
                     .stream(Files.newInputStream(Paths.get(file.getOriginalFilename())), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
 
-            Student student = studentRepository.findById(userId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with this id not found"));
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project with this id not found"));
 
-            student.setResumePdf(file.getOriginalFilename().replaceAll(" ", "").trim());
+            project.setPresentation(file.getOriginalFilename().replaceAll(" ", "").trim());
 
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "File uploaded successfully");
@@ -56,24 +56,24 @@ public class ResumeService {
         }
     }
 
-    public InputStream getResume(String fileName) {
+    public InputStream getPresentation(String fileName) {
         try {
             GetObjectArgs getObjectArgs = GetObjectArgs.builder()
-                    .bucket("resume")
+                    .bucket("presentation")
                     .object(fileName)
                     .build();
 
             return minioClient.getObject(getObjectArgs);
         } catch (Exception e) {
-            log.error("Error while getting resume", e);
+            log.error("Error while getting presentation", e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resume with this name not found");
         }
     }
 
-    public ResponseEntity<?> deleteResume(String fileName) {
+    public ResponseEntity<?> deletePresentation(String fileName) {
         try {
             RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
-                    .bucket("resume")
+                    .bucket("presentation")
                     .object(fileName)
                     .build();
 

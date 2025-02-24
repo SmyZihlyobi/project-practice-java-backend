@@ -44,8 +44,10 @@ public class Company implements Serializable {
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    List<String> role = Collections.singletonList("ROLE_COMPANY");
+    @ElementCollection
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role", nullable = false)
+    List<String> roles = new ArrayList<>(Collections.singletonList("ROLE_COMPANY"));
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Project> projects = new ArrayList<>();;
