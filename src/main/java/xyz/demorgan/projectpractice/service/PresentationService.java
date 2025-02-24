@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import xyz.demorgan.projectpractice.store.entity.Project;
-import xyz.demorgan.projectpractice.store.entity.Student;
 import xyz.demorgan.projectpractice.store.repos.ProjectRepository;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.HashMap;
 
 @AllArgsConstructor
