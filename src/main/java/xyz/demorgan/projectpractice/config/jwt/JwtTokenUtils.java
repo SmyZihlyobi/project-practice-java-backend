@@ -15,7 +15,7 @@ import java.util.*;
 @Component
 public class JwtTokenUtils {
 
-    private final Duration lifetime = Duration.ofMinutes(30);
+    private final Duration lifetime = Duration.ofDays(30);
     private final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
     public String generateToken(Company company) {
