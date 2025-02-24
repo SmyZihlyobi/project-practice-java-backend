@@ -51,5 +51,6 @@ public class Project implements Serializable {
     @ManyToOne
     @JoinColumn(name = "company_id")
     Company company;
+
 }
 

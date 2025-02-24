@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Optional;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -42,6 +43,8 @@ public class TechnicalSpecificationsService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project with this id not found"));
 
             project.setTechnicalSpecifications(file.getOriginalFilename().replaceAll(" ", "").trim());
+
+            projectRepository.save(project);
 
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "File uploaded successfully");
@@ -77,7 +80,16 @@ public class TechnicalSpecificationsService {
                     .build();
 
             minioClient.removeObject(removeObjectArgs);
-            return ResponseEntity.ok().body("File deleted successfully");
+            Project project = projectRepository.findByTechnicalSpecifications(fileName);
+
+            project.setTechnicalSpecifications("");
+
+            projectRepository.save(project);
+
+            HashMap<String, String> response = new HashMap<>();
+            response.put("message", "File deleted successfully");
+
+            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             log.error("Error deleting file", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting file");

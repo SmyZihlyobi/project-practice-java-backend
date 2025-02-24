@@ -35,7 +35,7 @@ public class PresentationService {
                     .builder()
                     .bucket("presentation")
                     .object(file.getOriginalFilename().replaceAll(" ", "").trim())
-                    .stream(Files.newInputStream(Paths.get(file.getOriginalFilename())), file.getSize(), -1)
+                    .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
 
@@ -43,6 +43,8 @@ public class PresentationService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project with this id not found"));
 
             project.setPresentation(file.getOriginalFilename().replaceAll(" ", "").trim());
+
+            projectRepository.save(project);
 
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "File uploaded successfully");
@@ -76,6 +78,11 @@ public class PresentationService {
                     .bucket("presentation")
                     .object(fileName)
                     .build();
+
+            Project project = projectRepository.findByPresentation(fileName);
+            project.setPresentation("");
+            projectRepository.save(project);
+
 
             minioClient.removeObject(removeObjectArgs);
             return ResponseEntity.ok().body("File deleted successfully");
