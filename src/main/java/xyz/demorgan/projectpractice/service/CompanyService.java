@@ -39,6 +39,7 @@ public class CompanyService {
     CompanyRepository companyRepository;
     AuthenticationManager authenticationManager;
     JwtTokenUtils jwtTokenUtils;
+    EmailService emailService;
 
     public List<CompanyDto> getAll() {
         log.info("Getting all companies at {}", System.currentTimeMillis());
@@ -77,19 +78,7 @@ public class CompanyService {
         company.setPassword(passwordEncoder.encode(generatedPassword));
         companyRepository.save(company);
 
-        System.out.println("Your account has been approved Your password is: " + generatedPassword);
-//        emailService.sendEmail(company.getEmail(), "Your account has been approved Your password is: " + generatedPassword);
-    }
-
-    private String generateRandomPassword() {
-        int length = 15;
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder password = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            password.append(chars.charAt(random.nextInt(chars.length())));
-        }
-        return password.toString();
+        emailService.sendEmail(generatedPassword); // ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
     }
 
     public ResponseEntity<?> login(CompanyLoginDto companyLoginDto) {
@@ -120,5 +109,27 @@ public class CompanyService {
         String token = jwtTokenUtils.generateToken(user);
 
         return ResponseEntity.ok(new LoginAnswer(token));
+    }
+
+    public void changePassword(String email) {
+        Company company = companyRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFound("Company with email " + email + " not found"));
+
+        String generatedPassword = generateRandomPassword();
+        company.setPassword(passwordEncoder.encode(generatedPassword));
+        companyRepository.save(company);
+
+        emailService.sendEmail(generatedPassword); // ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
+    }
+
+    private String generateRandomPassword() {
+        int length = 15;
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder password = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return password.toString();
     }
 }
