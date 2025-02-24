@@ -10,4 +10,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Student findByResumePdf(String resumePdf);
 
     List<Student> findAllByTeam(Team team);
+
+    List<Student> findAllByOrderByTeamNameAsc();
 }
