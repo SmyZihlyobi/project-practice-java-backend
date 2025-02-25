@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
+import xyz.demorgan.projectpractice.exceptions.JwtValidationException;
 import xyz.demorgan.projectpractice.store.entity.Company;
 
 import javax.crypto.SecretKey;
@@ -41,7 +42,7 @@ public class JwtTokenUtils {
     public String getEmailFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
         if (claims == null) {
-            throw new JwtException("Problem while getting email from token");
+            throw new JwtValidationException("Claims is null");
         }
         return claims.getSubject();
     }
@@ -49,7 +50,7 @@ public class JwtTokenUtils {
     public Integer getIdFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
         if (claims == null) {
-            throw new JwtException("Invalid token");
+            throw new JwtValidationException("Claims is null");
         }
         return claims.get("id", Integer.class);
     }
@@ -57,7 +58,7 @@ public class JwtTokenUtils {
     public List<String> getRolesFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
         if (claims == null) {
-            throw new JwtException("Invalid token");
+            throw new JwtValidationException("Claims is null");
         }
 
 
@@ -72,7 +73,7 @@ public class JwtTokenUtils {
             if (roleObj instanceof String) {
                 roles.add((String) roleObj);
             } else {
-                throw new JwtException("Role is not a String");
+                throw new JwtValidationException("Role is not a String");
             }
         }
 
@@ -86,7 +87,7 @@ public class JwtTokenUtils {
                     .build()
                     .parseSignedClaims(token).getPayload();
         } catch (JwtException e) {
-            return null;
+            throw new JwtValidationException("Invalid token", e);
         }
     }
 }
