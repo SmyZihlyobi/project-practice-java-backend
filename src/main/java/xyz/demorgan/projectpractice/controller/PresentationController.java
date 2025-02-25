@@ -22,7 +22,7 @@ public class PresentationController {
     PresentationService presentationService;
 
     @GetMapping("/presentation/{fileName}")
-    public ResponseEntity<InputStreamResource> getResume(@PathVariable String fileName) {
+    public ResponseEntity<InputStreamResource> getPresentation(@PathVariable String fileName) {
         log.info("Getting presentation {}", fileName);
 
         InputStream resume = presentationService.getPresentation(fileName);
@@ -34,13 +34,13 @@ public class PresentationController {
     }
 
     @PostMapping("/presentation")
-    public ResponseEntity<?> uploadResume(@RequestBody FilesToProjectUploadDto FilesToProjectUploadDto) {
+    public ResponseEntity<?> uploadPresentation(@RequestBody FilesToProjectUploadDto FilesToProjectUploadDto) {
         log.info("Uploading presentation for project {}", FilesToProjectUploadDto.getProjectId());
         return presentationService.uploadPresentation(FilesToProjectUploadDto.getProjectId(), FilesToProjectUploadDto.getFile());
     }
 
     @DeleteMapping("/presentation/{fileName}")
-    public ResponseEntity<?> deleteResume(@PathVariable String fileName) {
+    public ResponseEntity<?> deletePresentation(@PathVariable String fileName) {
         log.info("Deleting presentation {}", fileName);
         return presentationService.deletePresentation(fileName);
     }

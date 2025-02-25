@@ -21,9 +21,9 @@ import java.io.InputStream;
 public class TechnicalSpecificationsController {
     TechnicalSpecificationsService technicalSpecificationsService;
 
-    @GetMapping("/presentation/{fileName}")
-    public ResponseEntity<InputStreamResource> getResume(@PathVariable String fileName) {
-        log.info("Getting presentation {}", fileName);
+    @GetMapping("/technicalSpecifications/{fileName}")
+    public ResponseEntity<InputStreamResource> getTechnicalSpecifications(@PathVariable String fileName) {
+        log.info("Getting technicalSpecifications {}", fileName);
 
         InputStream resume = technicalSpecificationsService.getTechnicalSpecifications(fileName);
 
@@ -33,15 +33,15 @@ public class TechnicalSpecificationsController {
                 .body(new InputStreamResource(resume));
     }
 
-    @PostMapping("/presentation")
-    public ResponseEntity<?> uploadResume(@RequestBody FilesToProjectUploadDto FilesToProjectUploadDto) {
-        log.info("Uploading presentation for project {}", FilesToProjectUploadDto.getProjectId());
+    @PostMapping("/technicalSpecifications")
+    public ResponseEntity<?> uploadTechnicalSpecifications(@RequestBody FilesToProjectUploadDto FilesToProjectUploadDto) {
+        log.info("Uploading technicalSpecifications for project {}", FilesToProjectUploadDto.getProjectId());
         return technicalSpecificationsService.uploadTechnicalSpecifications(FilesToProjectUploadDto.getProjectId(), FilesToProjectUploadDto.getFile());
     }
 
-    @DeleteMapping("/presentation/{fileName}")
-    public ResponseEntity<?> deleteResume(@PathVariable String fileName) {
-        log.info("Deleting presentation {}", fileName);
+    @DeleteMapping("/technicalSpecifications/{fileName}")
+    public ResponseEntity<?> deleteTechnicalSpecifications(@PathVariable String fileName) {
+        log.info("Deleting technicalSpecifications {}", fileName);
         return technicalSpecificationsService.deleteTechnicalSpecifications(fileName);
     }
 }
