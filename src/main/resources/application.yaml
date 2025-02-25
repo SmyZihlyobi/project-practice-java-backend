@@ -1,4 +1,12 @@
 spring:
+  graphql:
+    graphiql:
+      enabled: true
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+
   application:
     name: project-practice-api
   servlet:
@@ -25,13 +33,7 @@ spring:
       port: ${REDIS_PORT:6379}
       host: ${REDIS_HOST:localhost}
 
-  graphql:
-    graphiql:
-      enabled: true
-    cors:
-      allowed-origins: "*"
-      allowed-methods: "*"
-      allowed-headers: "*"
+
 
 server:
   port: 8080
