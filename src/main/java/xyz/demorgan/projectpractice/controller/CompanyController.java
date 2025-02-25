@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import xyz.demorgan.projectpractice.service.CompanyService;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
@@ -24,7 +25,6 @@ public class CompanyController {
     CompanyService companyService;
     CompanyMapper companyMapper;
 
-    @Cacheable(value = "companies")
     @QueryMapping
     public List<CompanyDto> companies() {
         return companyService.getAll();
@@ -35,13 +35,12 @@ public class CompanyController {
         return companyService.getById(id);
     }
 
-    @CacheEvict(value = "companies", allEntries = true)
     @MutationMapping
     public CompanyDto createCompany(@Argument("input") CompanyInputDto companyInputDto) {
         return companyMapper.toCompanyDto(companyService.create(companyInputDto));
     }
 
-    @CacheEvict(value = "companies", allEntries = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public CompanyDto deleteCompany(@Argument("id") Long id) {
         return companyService.delete(id);

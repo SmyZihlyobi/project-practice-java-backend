@@ -8,6 +8,7 @@ import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.server.WebGraphQlRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import xyz.demorgan.projectpractice.service.ProjectService;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
@@ -34,6 +35,7 @@ public class ProjectController {
         return projectService.getById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @MutationMapping
     public ProjectDto createProject(@Argument ProjectInputDto input) {
         String token = request.getHeader("Authorization");
@@ -43,6 +45,7 @@ public class ProjectController {
         return projectService.create(input, token);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public void deleteProject(@Argument("id") Long id) {
         projectService.delete(id);
