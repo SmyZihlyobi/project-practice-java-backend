@@ -35,7 +35,7 @@ public class ResumeController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
-    @PostMapping("/resume")
+    @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadResume(@RequestBody ResumeUploadRequest resumeUploadRequest) {
         log.info("Uploading resume for user {}", resumeUploadRequest.getUserId());
         return filesService.uploadResume(resumeUploadRequest.getUserId(), resumeUploadRequest.getFile());

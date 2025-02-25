@@ -35,7 +35,7 @@ public class PresentationController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
-    @PostMapping("/presentation")
+    @PostMapping(value = "/presentation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadPresentation(@RequestBody FilesToProjectUploadDto FilesToProjectUploadDto) {
         log.info("Uploading presentation for project {}", FilesToProjectUploadDto.getProjectId());
         return presentationService.uploadPresentation(FilesToProjectUploadDto.getProjectId(), FilesToProjectUploadDto.getFile());
