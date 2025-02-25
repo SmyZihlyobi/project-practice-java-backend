@@ -16,12 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import xyz.demorgan.projectpractice.config.jwt.JwtFilter;
 import xyz.demorgan.projectpractice.config.jwt.UserService;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.List;
+
 
 @Slf4j
 @EnableWebSecurity
@@ -36,7 +38,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(withDefaults())
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
+                    var cors = new CorsConfiguration();
+                    cors.setAllowedOriginPatterns(List.of("http://62.233.43.154:*",  "http://localhost:*"));
+                    cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    cors.setAllowedHeaders(List.of("Authorization", "Content-Type", "apollo-require-preflight", "X-Requested-With"));
+                    cors.setExposedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "Location", "Content-Disposition"));
+                    cors.setAllowCredentials(true);
+                    cors.setMaxAge(3600L);
+                    return cors;
+                }))
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 )
@@ -64,20 +75,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOriginPatterns("*")
-                        .allowedMethods("*")
-                        .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials");
-            }
-        };
     }
 }

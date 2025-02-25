@@ -2,10 +2,6 @@ spring:
   graphql:
     graphiql:
       enabled: true
-    cors:
-      allowed-origins: "*"
-      allowed-methods: "*"
-      allowed-headers: "*"
 
   application:
     name: project-practice-api
