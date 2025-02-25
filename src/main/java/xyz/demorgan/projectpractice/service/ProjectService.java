@@ -3,6 +3,7 @@ package xyz.demorgan.projectpractice.service;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
@@ -46,6 +47,7 @@ public class ProjectService {
                 .orElseThrow(() -> new NotFound("Project with id " + id + " not found")));
     }
 
+    @CacheEvict(value = "projects", allEntries = true)
     public ProjectDto create(ProjectInputDto input, String jwtToken) {
         log.info("Creating project at {}", System.currentTimeMillis());
 
@@ -63,6 +65,7 @@ public class ProjectService {
         return projectMapper.toProjectDto(projectRepository.save(project));
     }
 
+    @CacheEvict(value = "projects", allEntries = true)
     public void delete(Long id) {
         log.info("Deleting project with id: {} at {}", id, System.currentTimeMillis());
         Project project = projectRepository.findById(id)
