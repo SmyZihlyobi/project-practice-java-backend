@@ -3,10 +3,7 @@ package xyz.demorgan.projectpractice.service;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.store.entity.Student;
@@ -41,25 +38,48 @@ public class ExcelService {
             cell.setCellValue(columns[i]);
         }
 
+        CellStyle style1 = workbook.createCellStyle();
+        style1.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        CellStyle style2 = workbook.createCellStyle();
+        style2.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+        style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
         int rowNum = 1;
+        String previousTeam = "";
+        boolean useStyle1 = true;
+
         for (Student student : students) {
             Row row = sheet.createRow(rowNum++);
 
-            row.createCell(0).setCellValue(student.getId());
-            row.createCell(1).setCellValue(student.getGroupId());
-            row.createCell(2).setCellValue(student.getYear());
-            row.createCell(3).setCellValue(student.getLastName());
-            row.createCell(4).setCellValue(student.getFirstName());
-            row.createCell(5).setCellValue(student.getPatronymic() != null ? student.getPatronymic() : "");
-            row.createCell(6).setCellValue(student.getFirstPriority());
-            row.createCell(7).setCellValue(student.getSecondPriority());
-            row.createCell(8).setCellValue(student.getThirdPriority());
-            row.createCell(9).setCellValue(student.getOtherPriorities() != null ? student.getOtherPriorities() : "");
-            row.createCell(10).setCellValue(student.getTelegram());
-            row.createCell(11).setCellValue(student.getResumePdf() != null ? student.getResumePdf() : "");
-            row.createCell(12).setCellValue(student.getResumeLink() != null ? student.getResumeLink() : "");
-            row.createCell(13).setCellValue(student.getCreatedAt().toString());
-            row.createCell(14).setCellValue(student.getTeam() != null ? student.getTeam().getName() : "");
+            if (!student.getTeam().getName().equals(previousTeam)) {
+                useStyle1 = !useStyle1;
+                previousTeam = student.getTeam().getName();
+            }
+
+            CellStyle currentStyle = useStyle1 ? style1 : style2;
+
+            for (int i = 0; i < columns.length; i++) {
+                Cell cell = row.createCell(i);
+                cell.setCellStyle(currentStyle);
+            }
+
+            row.getCell(0).setCellValue(student.getId());
+            row.getCell(1).setCellValue(student.getGroupId());
+            row.getCell(2).setCellValue(student.getYear());
+            row.getCell(3).setCellValue(student.getLastName());
+            row.getCell(4).setCellValue(student.getFirstName());
+            row.getCell(5).setCellValue(student.getPatronymic() != null ? student.getPatronymic() : "");
+            row.getCell(6).setCellValue(student.getFirstPriority());
+            row.getCell(7).setCellValue(student.getSecondPriority());
+            row.getCell(8).setCellValue(student.getThirdPriority());
+            row.getCell(9).setCellValue(student.getOtherPriorities() != null ? student.getOtherPriorities() : "");
+            row.getCell(10).setCellValue(student.getTelegram());
+            row.getCell(11).setCellValue(student.getResumePdf() != null ? student.getResumePdf() : "");
+            row.getCell(12).setCellValue(student.getResumeLink() != null ? student.getResumeLink() : "");
+            row.getCell(13).setCellValue(student.getCreatedAt().toString());
+            row.getCell(14).setCellValue(student.getTeam() != null ? student.getTeam().getName() : "");
         }
 
         return workbook;
