@@ -24,31 +24,60 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.debug("Filtering request");
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         String authHeader = request.getHeader("Authorization");
-        log.debug("Authorization header: {}", authHeader);
         String username = null;
         String jwt = null;
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
                 username = jwtTokenUtils.getEmailFromToken(jwt);
             } catch (ExpiredJwtException e) {
-                log.debug("Время жизни токена вышло");
+                log.error("Token expired: {}", e.getMessage());
+                handleException(response, "Token expired");
+                return;
             } catch (SignatureException e) {
-                log.debug("Подпись неправильная");
+                log.error("Invalid signature: {}", e.getMessage());
+                handleException(response, "Invalid token");
+                return;
+            } catch (Exception e) {
+                log.error("JWT processing error: {}", e.getMessage());
+                handleException(response, "Invalid token");
+                return;
             }
         }
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     username,
                     null,
-                    jwtTokenUtils.getRolesFromToken(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                    jwtTokenUtils.getRolesFromToken(jwt).stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList())
             );
             SecurityContextHolder.getContext().setAuthentication(token);
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private void handleException(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{ \"error\": \"" + message + "\" }");
     }
 
 
