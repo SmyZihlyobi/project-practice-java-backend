@@ -1,7 +1,7 @@
 type Student {
     id: ID!
-    team_name: String!
-    group_id: String!
+    teamName: String!
+    groupId: String!
     year: Int!
     lastName: String!
     firstName: String!
@@ -10,15 +10,15 @@ type Student {
     secondPriority: Int!
     thirdPriority: Int!
     otherPriorities: String
-    telegram: String
+    telegram: String!
     resumePdf: String
     resumeLink: String
     createdAt: String!
 }
 
 input StudentInput {
-    team_name: String!
-    group_id: String!
+    teamName: String!
+    groupId: String!
     year: Int!
     lastName: String!
     firstName: String!
@@ -27,7 +27,7 @@ input StudentInput {
     secondPriority: Int!
     thirdPriority: Int!
     otherPriorities: String
-    telegram: String
+    telegram: String!
     resumePdf: String
     resumeLink: String
 }

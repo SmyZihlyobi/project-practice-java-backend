@@ -14,6 +14,7 @@ import xyz.demorgan.projectpractice.store.mapper.StudentMapper;
 import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 import xyz.demorgan.projectpractice.store.repos.TeamRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,7 @@ public class StudentService {
             team = teamRepository.save(team);
         }
         student.setTeam(team);
+        student.setCreatedAt(LocalDateTime.now());
 
         student = studentRepository.save(student);
         return studentMapper.toStudentDto(student);
