@@ -73,7 +73,7 @@ public class ExcelService {
             }
 
             // Заполнение данных
-            fillStudentRow(student, row, rowStyles[styleIndex], dateStyle);
+            fillStudentRow(student, row, rowStyles[styleIndex]);
         }
 
         // Настройка ширины столбцов
@@ -125,7 +125,7 @@ public class ExcelService {
         }
     }
 
-    private void fillStudentRow(Student student, Row row, CellStyle style, CellStyle dateStyle) {
+    private void fillStudentRow(Student student, Row row, CellStyle style) {
         int colNum = 0;
 
         // Основная информация
