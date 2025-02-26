@@ -40,19 +40,19 @@ public class PresentationService {
             Project project = projectRepository.findById(projectId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project with this id not found"));
 
-            project.setPresentation(file.getOriginalFilename().replaceAll(" ", "").trim());
+            project.setPresentation(file.getOriginalFilename().replaceAll(" ", "_").trim());
 
             projectRepository.save(project);
 
             HashMap<String, String> response = new HashMap<>();
-            response.put("message", "File uploaded successfully");
-            response.put("fileName", file.getOriginalFilename());
+            response.put("message", "Presentation uploaded successfully");
+            response.put("fileName", file.getOriginalFilename().replaceAll(" ", "_").trim());
 
             return ResponseEntity.ok().body(response);
 
         } catch (Exception e) {
-            log.error("Error uploading file", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file");
+            log.error("Error uploading presentation", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading presentation");
         }
     }
 
@@ -78,7 +78,7 @@ public class PresentationService {
                     .build();
 
             Project project = projectRepository.findByPresentation(fileName);
-            project.setPresentation("");
+            project.setPresentation(null);
             projectRepository.save(project);
 
 

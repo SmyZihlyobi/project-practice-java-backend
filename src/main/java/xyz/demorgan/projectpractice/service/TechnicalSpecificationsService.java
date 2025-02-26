@@ -14,10 +14,8 @@ import xyz.demorgan.projectpractice.store.entity.Project;
 import xyz.demorgan.projectpractice.store.repos.ProjectRepository;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Optional;
+
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -34,7 +32,7 @@ public class TechnicalSpecificationsService {
             minioClient.putObject(PutObjectArgs
                     .builder()
                     .bucket("technical-specifications")
-                    .object(file.getOriginalFilename().replaceAll(" ", "").trim())
+                    .object(file.getOriginalFilename().replaceAll(" ", "_").trim())
                     .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
@@ -47,8 +45,8 @@ public class TechnicalSpecificationsService {
             projectRepository.save(project);
 
             HashMap<String, String> response = new HashMap<>();
-            response.put("message", "File uploaded successfully");
-            response.put("fileName", file.getOriginalFilename());
+            response.put("message", "Technical specifications uploaded successfully");
+            response.put("fileName", file.getOriginalFilename().replaceAll(" ", "_").trim());
 
             return ResponseEntity.ok().body(response);
 
@@ -82,7 +80,7 @@ public class TechnicalSpecificationsService {
             minioClient.removeObject(removeObjectArgs);
             Project project = projectRepository.findByTechnicalSpecifications(fileName);
 
-            project.setTechnicalSpecifications("");
+            project.setTechnicalSpecifications(null);
 
             projectRepository.save(project);
 

@@ -85,13 +85,13 @@ public class ResumeService {
             minioClient.removeObject(removeObjectArgs);
 
             Student student = studentRepository.findByResumePdf(fileName);
-            student.setResumePdf("");
+            student.setResumePdf(null);
             studentRepository.save(student);
 
-            return ResponseEntity.ok().body("File deleted successfully");
+            return ResponseEntity.ok().body("Resume deleted successfully");
         } catch (Exception e) {
-            log.error("Error deleting file", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting file");
+            log.error("Error deleting resume", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting resume");
         }
     }
 
