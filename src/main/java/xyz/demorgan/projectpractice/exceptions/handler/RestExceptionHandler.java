@@ -4,6 +4,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -38,6 +41,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         body.put(MESSAGE, message);
         return body;
     }
+
     private Map<String, Object> createErrorBodyWithErrors(HttpStatus status, String error,
                                                           String message, List<String> errors) {
         Map<String, Object> body = createErrorBody(status, error, message);
@@ -55,6 +59,37 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(JwtValidationException.class)
     public ResponseEntity<Object> handleJwtValidationException(JwtValidationException ex) {
+        return new ResponseEntity<>(
+                createErrorBody(HttpStatus.UNAUTHORIZED, "Authentication Error", ex.getMessage()),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        return new ResponseEntity<>(
+                createErrorBody(HttpStatus.UNAUTHORIZED, "Authentication Error", "Invalid username or password"),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<Object> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
+        String errorMessage = ex.getMessage();
+        if (errorMessage != null && errorMessage.contains("User Not Found")) {
+            return new ResponseEntity<>(
+                    createErrorBody(HttpStatus.NOT_FOUND, "User Not Found", "User with the provided email does not exist"),
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        return new ResponseEntity<>(
+                createErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, "Authentication Error", "Internal authentication error"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
         return new ResponseEntity<>(
                 createErrorBody(HttpStatus.UNAUTHORIZED, "Authentication Error", ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
