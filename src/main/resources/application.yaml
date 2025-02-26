@@ -44,6 +44,9 @@ minio:
 springdoc:
   swagger-ui:
     path: /docs
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
 
 logging:
   level:

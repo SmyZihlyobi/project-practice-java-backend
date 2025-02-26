@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class FlywayConfig {
     @Bean
-    public FlywayMigrationStrategy migrate() {
+    public static FlywayMigrationStrategy migrate() {
         return flyway -> {
             log.info("Checking Flyway migrations...");
             var info = flyway.info();

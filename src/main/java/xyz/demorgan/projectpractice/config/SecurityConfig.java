@@ -59,6 +59,7 @@ public class SecurityConfig {
                 "null",
                 "http://localhost:*",
                 "http://62.233.43.154:*",
+                "http://62.233.43.154",
                 "http://127.0.0.1:*"
         ));
 
