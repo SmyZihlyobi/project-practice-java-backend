@@ -42,7 +42,7 @@ public class ResumeService {
             Student student = studentRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with this id not found"));
 
-            student.setResumePdf(file.getOriginalFilename().replaceAll(" ", "_").trim());
+            student.setResumePdf(file.getOriginalFilename().replaceAll(" ", "_").trim()); // TODO сделать генерацию названия нормально и для ретерна
 
             studentRepository.save(student);
 
