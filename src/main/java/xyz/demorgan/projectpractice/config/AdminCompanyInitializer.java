@@ -40,7 +40,6 @@ public class AdminCompanyInitializer implements CommandLineRunner {
         }
 
         Company company = new Company();
-        company.setId(1L);
         company.setName("ИКНТ");
         company.setRepresentative("ИКНТ");
         company.setContacts("ИКНТ");
