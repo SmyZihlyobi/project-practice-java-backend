@@ -48,6 +48,11 @@ springdoc:
     enabled: true
     path: /v3/api-docs
 
+company:
+  default:
+    email: ${COMPANY_DEFAULT_EMAIL:iknt@psu.ru}
+    password: ${COMPANY_DEFAULT_PASSWORD:eBxYWr/PlJ8fB%Z:'vCt__[[S#{O|'}
+
 logging:
   level:
     root: info

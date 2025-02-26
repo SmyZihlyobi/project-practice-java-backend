@@ -16,6 +16,8 @@ services:
       MINIO_ROOT_USER: 7fcc12fdc2d1
       MINIO_ROOT_PASSWORD: 96a19220ee73
       MINIO_ENDPOINT: http://minio:9000
+      COMPANY_DEFAULT_EMAIL: iknt@docker.ru
+      COMPANY_DEFAULT_PASSWORD: docker_password
       REDIS_HOST: redis
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
