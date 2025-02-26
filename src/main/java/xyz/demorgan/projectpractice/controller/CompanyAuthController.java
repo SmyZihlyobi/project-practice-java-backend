@@ -37,7 +37,7 @@ public class CompanyAuthController {
     }
 
     @PostMapping(CHANGE_PASSWORD)
-    public ResponseEntity<?> changePassword(@RequestBody String email) {
+    public ResponseEntity<?> changePassword(@RequestParam String email) {
         companyService.changePassword(email);
         return ResponseEntity.ok().build();
     }
