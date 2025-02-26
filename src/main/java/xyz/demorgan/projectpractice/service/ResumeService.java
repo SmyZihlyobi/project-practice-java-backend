@@ -14,9 +14,10 @@ import xyz.demorgan.projectpractice.store.entity.Student;
 import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.UUID;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -28,27 +29,29 @@ public class ResumeService {
     FileValidateService fileValidateService;
 
     public ResponseEntity<?> uploadResume(Long userId, MultipartFile file) {
+
+        Student student = studentRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with this id not found"));
+
         fileValidateService.validateFile(file);
+        String generatedFileName = generateFileName(file, student);
 
         try {
             minioClient.putObject(PutObjectArgs
                     .builder()
                     .bucket("resume")
-                    .object(file.getOriginalFilename().replaceAll(" ", "").trim())
+                    .object(generatedFileName)
                     .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
 
-            Student student = studentRepository.findById(userId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with this id not found"));
-
-            student.setResumePdf(file.getOriginalFilename().replaceAll(" ", "_").trim()); // TODO сделать генерацию названия нормально и для ретерна
+            student.setResumePdf(generatedFileName);
 
             studentRepository.save(student);
 
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "File uploaded successfully");
-            response.put("fileName", file.getOriginalFilename());
+            response.put("fileName", generatedFileName);
 
             return ResponseEntity.ok().body(response);
 
@@ -90,5 +93,27 @@ public class ResumeService {
             log.error("Error deleting file", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting file");
         }
+    }
+
+    private String generateFileName(MultipartFile file, Student student) {
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null) {
+            originalFileName = "file";
+        }
+
+        String fileExtension = "";
+        int lastDotIndex = originalFileName.lastIndexOf('.');
+        if (lastDotIndex > 0) {
+            fileExtension = originalFileName.substring(lastDotIndex);
+        }
+
+        String studentFullName = student.getId() + "_" + student.getFirstName() + "_" + student.getLastName() ;
+
+        String timestamp = student.getCreatedAt()
+                .format(
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                );
+
+        return studentFullName +  "_"  + timestamp + fileExtension;
     }
 }
