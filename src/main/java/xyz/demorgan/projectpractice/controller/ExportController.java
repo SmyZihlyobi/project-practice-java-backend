@@ -48,7 +48,7 @@ public class ExportController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/export/students/file")
+    @GetMapping("/export/students")
     public ResponseEntity<List<StudentExportDto>> getStudents() {
         return ResponseEntity.ok(
                 studentRepository.findAllByOrderByTeamNameAsc()
