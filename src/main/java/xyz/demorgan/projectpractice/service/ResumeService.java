@@ -1,6 +1,8 @@
 package xyz.demorgan.projectpractice.service;
 
 import io.minio.*;
+import io.minio.errors.MinioException;
+import io.minio.messages.Item;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 import xyz.demorgan.projectpractice.store.entity.Student;
 import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -93,6 +98,29 @@ public class ResumeService {
             log.error("Error deleting resume", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting resume");
         }
+    }
+
+    public void deleteAllObjectsInBucket() throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
+        String bucketName = "resume";
+
+        boolean isBucketExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+        if (!isBucketExist) {
+            throw new IllegalArgumentException("Бакет " + bucketName + " не существует.");
+        }
+
+        Iterable<Result<Item>> objects = minioClient.listObjects(
+                ListObjectsArgs.builder().bucket(bucketName).recursive(true).build());
+
+        for (Result<Item> result : objects) {
+            Item item = result.get();
+            minioClient.removeObject(RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(item.objectName())
+                    .build());
+            log.info("Удален объект: {}", item.objectName());
+        }
+
+        log.info("Все объекты из бакета {} успешно удалены.", bucketName);
     }
 
     private String generateFileName(MultipartFile file, Student student) {

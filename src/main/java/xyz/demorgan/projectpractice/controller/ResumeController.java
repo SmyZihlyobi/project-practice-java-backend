@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import xyz.demorgan.projectpractice.service.ResumeService;
 import xyz.demorgan.projectpractice.store.dto.input.ResumeUploadRequest;
 
 import java.io.InputStream;
+import java.util.HashMap;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -20,13 +22,13 @@ import java.io.InputStream;
 @Slf4j
 @RequestMapping("api/v1/files")
 public class ResumeController {
-    ResumeService filesService;
+    ResumeService resumeService;
 
     @GetMapping("/resume/{fileName}")
     public ResponseEntity<InputStreamResource> getResume(@PathVariable String fileName) {
         log.info("Getting resume {}", fileName);
 
-        InputStream resume = filesService.getResume(fileName);
+        InputStream resume = resumeService.getResume(fileName);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
@@ -38,13 +40,29 @@ public class ResumeController {
     @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadResume(@ModelAttribute ResumeUploadRequest resumeUploadRequest) {
         log.info("Uploading resume for user {}", resumeUploadRequest.getUserId());
-        return filesService.uploadResume(resumeUploadRequest.getUserId(), resumeUploadRequest.getFile());
+        return resumeService.uploadResume(resumeUploadRequest.getUserId(), resumeUploadRequest.getFile());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/resume/{fileName}")
     public ResponseEntity<?> deleteResume(@PathVariable String fileName) {
         log.info("Deleting resume {}", fileName);
-        return filesService.deleteResume(fileName);
+        return resumeService.deleteResume(fileName);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/resume/clear-bucket")
+    public ResponseEntity<?> deleteAllObjectsInBucket() {
+        try {
+            resumeService.deleteAllObjectsInBucket();
+            HashMap<String, String> response = new HashMap<>();
+            response.put("message", "Все объекты из бакета resume успешно удалены.");
+
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            HashMap<String, String> response = new HashMap<>();
+            response.put("message", "Ошибка при удалении объектов: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 }
