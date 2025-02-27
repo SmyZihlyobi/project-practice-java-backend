@@ -3,6 +3,7 @@ package xyz.demorgan.projectpractice.exceptions.handler;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.schema.DataFetchingEnvironment;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,15 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
                     .build();
         }
         else if (ex instanceof ConstraintViolationException violationEx) {
-            return handleConstraintViolation(violationEx, env);
+            return GraphqlErrorBuilder.newError()
+                    .message("Validation error")
+                    .errorType(ErrorType.BAD_REQUEST)
+                    .extensions(violationEx.getConstraintViolations().stream()
+                            .collect(Collectors.toMap(
+                                    v -> v.getPropertyPath().toString(),
+                                    ConstraintViolation::getMessage
+                            )))
+                    .build();
         }
         else if (ex instanceof WebExchangeBindException bindEx) {
             return handleBindException(bindEx, env);
@@ -47,17 +56,6 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
         return super.resolveToSingleError(ex, env);
     }
 
-    private GraphQLError handleConstraintViolation(ConstraintViolationException ex, DataFetchingEnvironment env) {
-        log.error("Validation error: {} at {}", ex.getMessage(), LocalDateTime.now());
-        String message = ex.getConstraintViolations().stream()
-                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-                .collect(Collectors.joining("; "));
-
-        return GraphqlErrorBuilder.newError(env)
-                .message("Validation failed: " + message)
-                .errorType(ErrorType.BAD_REQUEST)
-                .build();
-    }
 
     private GraphQLError handleBindException(WebExchangeBindException ex, DataFetchingEnvironment env) {
         log.error("Binding error: {} at {}", ex.getMessage(), LocalDateTime.now());
