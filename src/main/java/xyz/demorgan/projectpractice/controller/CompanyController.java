@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,7 +37,7 @@ public class CompanyController {
     }
 
     @MutationMapping
-    public CompanyDto createCompany(@Argument("input") CompanyInputDto companyInputDto) {
+    public CompanyDto createCompany(@Argument("input") @Valid CompanyInputDto companyInputDto) {
         return companyMapper.toCompanyDto(companyService.create(companyInputDto));
     }
 

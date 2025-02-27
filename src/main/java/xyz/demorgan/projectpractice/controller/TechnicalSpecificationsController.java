@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -39,7 +40,7 @@ public class TechnicalSpecificationsController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @PostMapping(value = "/technicalSpecifications", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadTechnicalSpecifications(@ModelAttribute FilesToProjectUploadDto FilesToProjectUploadDto) {
+    public ResponseEntity<?> uploadTechnicalSpecifications(@ModelAttribute @Valid FilesToProjectUploadDto FilesToProjectUploadDto) {
         log.info("Uploading technicalSpecifications for project {}", FilesToProjectUploadDto.getProjectId());
         return technicalSpecificationsService.uploadTechnicalSpecifications(FilesToProjectUploadDto.getProjectId(), FilesToProjectUploadDto.getFile());
     }

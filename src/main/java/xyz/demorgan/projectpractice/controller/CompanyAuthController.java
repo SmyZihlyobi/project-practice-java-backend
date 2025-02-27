@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,7 +33,7 @@ public class CompanyAuthController {
     }
 
     @PostMapping(LOGIN)
-    public ResponseEntity<?> login(@RequestBody CompanyLoginDto companyLoginDto) {
+    public ResponseEntity<?> login(@RequestBody @Valid CompanyLoginDto companyLoginDto) {
         return companyService.login(companyLoginDto);
     }
 

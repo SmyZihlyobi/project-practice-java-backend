@@ -1,6 +1,7 @@
 package xyz.demorgan.projectpractice.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -37,7 +38,7 @@ public class ProjectController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @MutationMapping
-    public ProjectDto createProject(@Argument ProjectInputDto input) {
+    public ProjectDto createProject(@Argument @Valid ProjectInputDto input) {
         String token = request.getHeader("Authorization");
         if (token == null) {
             throw new RuntimeException("Authorization header is null");

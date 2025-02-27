@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -38,7 +39,7 @@ public class ResumeController {
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") TODO
     @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadResume(@ModelAttribute ResumeUploadRequest resumeUploadRequest) {
+    public ResponseEntity<?> uploadResume(@ModelAttribute @Valid ResumeUploadRequest resumeUploadRequest) {
         log.info("Uploading resume for user {}", resumeUploadRequest.getUserId());
         return resumeService.uploadResume(resumeUploadRequest.getUserId(), resumeUploadRequest.getFile());
     }

@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -34,7 +35,7 @@ public class StudentController {
     }
 
     @MutationMapping
-    public StudentDto createStudent(@Argument("input") StudentInputDto studentInputDto) {
+    public StudentDto createStudent(@Argument("input") @Valid StudentInputDto studentInputDto) {
         return studentService.addStudent(studentInputDto);
     }
 
