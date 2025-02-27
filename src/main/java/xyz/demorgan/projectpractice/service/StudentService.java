@@ -50,20 +50,30 @@ public class StudentService {
         log.info("Adding student at {}", System.currentTimeMillis());
         Student student = studentMapper.toEntity(studentInputDto);
 
+        Team team;
         if (studentInputDto.getTeamName() != null) {
-            Team team = teamRepository.findByNameIgnoreCase(studentInputDto.getTeamName());
+            team = teamRepository.findByNameIgnoreCase(studentInputDto.getTeamName());
             if (team == null) {
                 team = new Team();
                 team.setName(studentInputDto.getTeamName());
                 team = teamRepository.save(team);
             }
-            student.setTeam(team);
+        } else {
+            String defaultTeamName = "Не выбрана";
+            team = teamRepository.findByNameIgnoreCase(defaultTeamName);
+            if (team == null) {
+                team = new Team();
+                team.setName(defaultTeamName);
+                team = teamRepository.save(team);
+            }
         }
 
+        student.setTeam(team);
         student.setCreatedAt(LocalDateTime.now());
         student = studentRepository.save(student);
         return studentMapper.toStudentDto(student);
     }
+
 
     @Transactional
     public StudentDto deleteStudent(Long id) {
