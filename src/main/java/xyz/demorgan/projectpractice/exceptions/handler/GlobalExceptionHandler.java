@@ -3,14 +3,18 @@ package xyz.demorgan.projectpractice.exceptions.handler;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.schema.DataFetchingEnvironment;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -33,6 +37,37 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
                     .errorType(ErrorType.BAD_REQUEST)
                     .build();
         }
+        else if (ex instanceof ConstraintViolationException violationEx) {
+            return handleConstraintViolation(violationEx, env);
+        }
+        else if (ex instanceof WebExchangeBindException bindEx) {
+            return handleBindException(bindEx, env);
+        }
+
         return super.resolveToSingleError(ex, env);
+    }
+
+    private GraphQLError handleConstraintViolation(ConstraintViolationException ex, DataFetchingEnvironment env) {
+        log.error("Validation error: {} at {}", ex.getMessage(), LocalDateTime.now());
+        String message = ex.getConstraintViolations().stream()
+                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                .collect(Collectors.joining("; "));
+
+        return GraphqlErrorBuilder.newError(env)
+                .message("Validation failed: " + message)
+                .errorType(ErrorType.BAD_REQUEST)
+                .build();
+    }
+
+    private GraphQLError handleBindException(WebExchangeBindException ex, DataFetchingEnvironment env) {
+        log.error("Binding error: {} at {}", ex.getMessage(), LocalDateTime.now());
+        String message = ex.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.joining("; "));
+
+        return GraphqlErrorBuilder.newError(env)
+                .message("Invalid request: " + message)
+                .errorType(ErrorType.BAD_REQUEST)
+                .build();
     }
 }
