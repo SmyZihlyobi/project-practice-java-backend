@@ -19,7 +19,7 @@ import xyz.demorgan.projectpractice.service.CompanyService;
 import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(makeFinal = true)
 @RestController
 @Tag(name = "Company auth controller", description = "Controller for company authentication")
 @Slf4j
@@ -27,9 +27,9 @@ import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 public class CompanyAuthController {
     CompanyService companyService;
 
-    final static String LOGIN = "/company/login";
-    final static String APPROVE_COMPANY = "/company/approve";
-    final static String CHANGE_PASSWORD = "/company/change-password";
+    public final static String LOGIN = "/company/login";
+    public final static String APPROVE_COMPANY = "/company/approve";
+    public final static String CHANGE_PASSWORD = "/company/change-password";
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @SecurityRequirement(name = "bearerAuth")

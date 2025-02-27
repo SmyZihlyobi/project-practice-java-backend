@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import xyz.demorgan.projectpractice.controller.CompanyAuthController;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -30,6 +31,12 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String path = request.getRequestURI();
+        if (path.equals(CompanyAuthController.LOGIN) || path.equals(CompanyAuthController.CHANGE_PASSWORD)) {
             filterChain.doFilter(request, response);
             return;
         }
