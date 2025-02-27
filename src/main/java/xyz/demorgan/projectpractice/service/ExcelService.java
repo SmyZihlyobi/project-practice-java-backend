@@ -98,7 +98,7 @@ public class ExcelService {
 
         CellStyle style = workbook.createCellStyle();
         style.setFont(headerFont);
-        style.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
+        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setBorderBottom(BorderStyle.THIN);
@@ -113,10 +113,12 @@ public class ExcelService {
         CellStyle style1 = workbook.createCellStyle();
         style1.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
         style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style1.setAlignment(HorizontalAlignment.CENTER);
 
         CellStyle style2 = workbook.createCellStyle();
         style2.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
         style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style2.setAlignment(HorizontalAlignment.CENTER);
 
         return new CellStyle[]{style1, style2};
     }
@@ -155,7 +157,7 @@ public class ExcelService {
         createCell(row, colNum++, student.getTelegram(), style);
 
         // Резюме
-        createCell(row, colNum++, student.getResumePdf(), style);
+        createCell(row, colNum++, student.getResumePdf() != null ? "прикреплено" : "", style);
         createCell(row, colNum++, student.getResumeLink(), style);
 
         // Команда
