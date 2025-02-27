@@ -1,5 +1,8 @@
 package xyz.demorgan.projectpractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,11 +23,13 @@ import java.util.HashMap;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
+@Tag(name = "Presentation controller", description = "Controller for uploading, downloading and deleting presentations")
 @Slf4j
 @RequestMapping("api/v1/files")
 public class PresentationController {
     PresentationService presentationService;
 
+    @Operation(summary = "Get presentation", description = "Get presentation by file name")
     @GetMapping("/presentation/{fileName}")
     public ResponseEntity<InputStreamResource> getPresentation(@PathVariable String fileName) {
         log.info("Getting presentation {}", fileName);
@@ -38,6 +43,8 @@ public class PresentationController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Upload presentation", description = "Upload presentation for project")
     @PostMapping(value = "/presentation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadPresentation(@ModelAttribute @Valid FilesToProjectUploadDto FilesToProjectUploadDto) {
         log.info("Uploading presentation for project {}", FilesToProjectUploadDto.getProjectId());
@@ -45,6 +52,8 @@ public class PresentationController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Delete presentation", description = "Delete presentation by file name")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/presentation/{fileName}")
     public ResponseEntity<?> deletePresentation(@PathVariable String fileName) {
         log.info("Deleting presentation {}", fileName);
@@ -52,6 +61,8 @@ public class PresentationController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Delete all presentations", description = "Delete all presentations")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/presentation/clear-bucket")
     public ResponseEntity<?> deleteAllObjectsInBucket() {
         try {

@@ -1,5 +1,8 @@
 package xyz.demorgan.projectpractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,6 +20,7 @@ import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
+@Tag(name = "Company auth controller", description = "Controller for company authentication")
 @Slf4j
 public class CompanyAuthController {
     CompanyService companyService;
@@ -26,6 +30,8 @@ public class CompanyAuthController {
     final static String CHANGE_PASSWORD = "/company/change-password";
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Approve company", description = "Approve company by id to allow it to login")
     @PostMapping(APPROVE_COMPANY)
     public ResponseEntity<?> approveCompany(@RequestParam Long companyId) {
         companyService.approveCompany(companyId);
@@ -33,11 +39,13 @@ public class CompanyAuthController {
     }
 
     @PostMapping(LOGIN)
+    @Operation(summary = "Login company", description = "Login company by email and password")
     public ResponseEntity<?> login(@RequestBody @Valid CompanyLoginDto companyLoginDto) {
         return companyService.login(companyLoginDto);
     }
 
     @PostMapping(CHANGE_PASSWORD)
+    @Operation(summary = "Change password", description = "Change password for company by email")
     public ResponseEntity<?> changePassword(@RequestParam String email) {
         companyService.changePassword(email);
         return ResponseEntity.ok().build();

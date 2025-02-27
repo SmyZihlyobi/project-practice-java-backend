@@ -1,5 +1,8 @@
 package xyz.demorgan.projectpractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,10 +24,12 @@ import java.util.HashMap;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @Slf4j
+@Tag(name = "Resume controller", description = "Controller for uploading, downloading and deleting resumes")
 @RequestMapping("api/v1/files")
 public class ResumeController {
     ResumeService resumeService;
 
+    @Operation(summary = "Get resume", description = "Get resume by file name")
     @GetMapping("/resume/{fileName}")
     public ResponseEntity<InputStreamResource> getResume(@PathVariable String fileName) {
         log.info("Getting resume {}", fileName);
@@ -38,6 +43,8 @@ public class ResumeController {
     }
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") TODO
+    @Operation(summary = "Upload resume", description = "Upload resume for user")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadResume(@ModelAttribute @Valid ResumeUploadRequest resumeUploadRequest) {
         log.info("Uploading resume for user {}", resumeUploadRequest.getUserId());
@@ -45,13 +52,17 @@ public class ResumeController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Delete resume", description = "Delete resume by file name")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/resume/{fileName}")
     public ResponseEntity<?> deleteResume(@PathVariable String fileName) {
         log.info("Deleting resume {}", fileName);
         return resumeService.deleteResume(fileName);
     }
 
+    @Operation(summary = "Delete all resumes", description = "Delete all resumes")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/resume/clear-bucket")
     public ResponseEntity<?> deleteAllObjectsInBucket() {
         try {

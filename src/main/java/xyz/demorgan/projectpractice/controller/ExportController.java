@@ -1,5 +1,8 @@
 package xyz.demorgan.projectpractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Export controller", description = "Controller for exporting students to Excel or JSON")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExportController {
 
@@ -31,6 +35,8 @@ public class ExportController {
     StudentMapper studentMapper;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Export students to Excel file", description = "Export all students to Excel file")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/export/students/file")
     public ResponseEntity<ByteArrayResource> exportToExcel() throws IOException {
         Workbook workbook = excelService.exportStudents();
@@ -48,6 +54,8 @@ public class ExportController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Export students to JSON", description = "Export all students to JSON, можно использовать в будущем для алгоритма распределения")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/export/students")
     public ResponseEntity<List<StudentExportDto>> getStudents() {
         return ResponseEntity.ok(

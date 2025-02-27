@@ -1,5 +1,8 @@
 package xyz.demorgan.projectpractice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,12 +23,15 @@ import java.util.HashMap;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
+@Tag(name = "TechnicalSpecifications controller", description = "Controller for uploading, downloading and deleting technicalSpecifications")
 @Slf4j
 @RequestMapping("api/v1/files")
 public class TechnicalSpecificationsController {
     TechnicalSpecificationsService technicalSpecificationsService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
+    @Operation(summary = "Get technicalSpecifications", description = "Get technicalSpecifications by file name")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/technicalSpecifications/{fileName}")
     public ResponseEntity<InputStreamResource> getTechnicalSpecifications(@PathVariable String fileName) {
         log.info("Getting technicalSpecifications {}", fileName);
@@ -39,6 +45,7 @@ public class TechnicalSpecificationsController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
+    @Operation(summary = "Upload technicalSpecifications", description = "Upload technicalSpecifications for project")
     @PostMapping(value = "/technicalSpecifications", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadTechnicalSpecifications(@ModelAttribute @Valid FilesToProjectUploadDto FilesToProjectUploadDto) {
         log.info("Uploading technicalSpecifications for project {}", FilesToProjectUploadDto.getProjectId());
@@ -46,6 +53,8 @@ public class TechnicalSpecificationsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Delete technicalSpecifications", description = "Delete technicalSpecifications by file name")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/technicalSpecifications/{fileName}")
     public ResponseEntity<?> deleteTechnicalSpecifications(@PathVariable String fileName) {
         log.info("Deleting technicalSpecifications {}", fileName);
@@ -53,6 +62,8 @@ public class TechnicalSpecificationsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Delete all technicalSpecifications", description = "Delete all technicalSpecifications")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/technicalSpecifications/clear-bucket")
     public ResponseEntity<?> deleteAllObjectsInBucket() {
         try {
