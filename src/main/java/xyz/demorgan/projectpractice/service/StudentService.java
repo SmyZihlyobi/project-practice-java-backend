@@ -48,15 +48,17 @@ public class StudentService {
         log.info("Adding student at {}", System.currentTimeMillis());
         Student student = studentMapper.toEntity(studentInputDto);
 
-        Team team = teamRepository.findByNameIgnoreCase(studentInputDto.getTeamName());
-        if (team == null) {
-            team = new Team();
-            team.setName(studentInputDto.getTeamName());
-            team = teamRepository.save(team);
+        if (studentInputDto.getTeamName() != null) {
+            Team team = teamRepository.findByNameIgnoreCase(studentInputDto.getTeamName());
+            if (team == null) {
+                team = new Team();
+                team.setName(studentInputDto.getTeamName());
+                team = teamRepository.save(team);
+            }
+            student.setTeam(team);
         }
-        student.setTeam(team);
-        student.setCreatedAt(LocalDateTime.now());
 
+        student.setCreatedAt(LocalDateTime.now());
         student = studentRepository.save(student);
         return studentMapper.toStudentDto(student);
     }

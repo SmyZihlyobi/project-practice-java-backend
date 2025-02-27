@@ -61,7 +61,7 @@ public class AdminCompanyInitializer implements CommandLineRunner {
         log.warn("Название: {}", company.getName());
         log.warn("Email: {}", company.getEmail());
         log.warn("Email: {}", defaultPassword);
-        log.warn("НЕОБХОДИМО ИЗМЕНИТЬ ПАРОЛЬ ПОСЛЕ ПЕРВОГО ВХОДА!");
+        log.warn("ЖЕЛАТЕЛЬНО ИЗМЕНИТЬ ПАРОЛЬ ПОСЛЕ ПЕРВОГО ВХОДА!");
         log.warn("================================================");
     }
 }

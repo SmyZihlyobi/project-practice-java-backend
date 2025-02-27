@@ -2,6 +2,7 @@ package xyz.demorgan.projectpractice.store.dto.input;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ public class ProjectInputDto {
     String name;
     @NotBlank(message = "Описание проекта не может быть пустым")
     String description;
-    @NotBlank(message = "Количество команд на проекте не может быть пустой")
+    @NotNull(message = "Количество команд на проекте не может быть пустой")
     @Min(value = 1, message = "Количество команд на проекте должно быть больше 0")
     int teamsAmount;
     @NotBlank(message = "Стек технологий не может быть пустым")

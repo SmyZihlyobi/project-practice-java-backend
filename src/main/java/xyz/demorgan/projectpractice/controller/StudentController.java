@@ -24,13 +24,13 @@ import static lombok.AccessLevel.PRIVATE;
 public class StudentController {
     StudentService studentService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_COMPANY, ROLE_STUDENT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @QueryMapping
     public List<StudentDto> students() {
         return studentService.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_COMPANY, ROLE_STUDENT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @QueryMapping
     public void student(@Argument Long id) {
         studentService.getById(id);

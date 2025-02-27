@@ -27,8 +27,8 @@ public class OpenApiConfig {
                 .version("1.0")
                         .contact(new Contact()
                                 .name("""
-                                            Support Team iknt@psu.ru
-                                            Dev Team @Demorganbtw
+                                            Support Team - iknt@psu.ru
+                                            Dev Team - @Demorganbtw
                                             """)
                                 .url("https://t.me/Demorganbtw")));
     }
