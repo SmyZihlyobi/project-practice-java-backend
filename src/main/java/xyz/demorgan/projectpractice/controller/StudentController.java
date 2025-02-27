@@ -1,7 +1,10 @@
 package xyz.demorgan.projectpractice.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -14,9 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.StudentService;
 import xyz.demorgan.projectpractice.store.dto.StudentDto;
+import xyz.demorgan.projectpractice.store.dto.input.ResumeUploadRequest;
 import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
 
 import java.util.List;
+import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -27,6 +32,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class StudentController {
     StudentService studentService;
     HttpServletRequest request;
+    Validator validator;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @QueryMapping
@@ -42,6 +48,10 @@ public class StudentController {
 
     @MutationMapping
     public StudentDto createStudent(@Argument("input") @Valid StudentInputDto studentInputDto) {
+        Set<ConstraintViolation<StudentInputDto>> violations = validator.validate(studentInputDto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         return studentService.addStudent(studentInputDto);
     }
 

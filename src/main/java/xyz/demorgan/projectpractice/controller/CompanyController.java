@@ -1,6 +1,9 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.cache.annotation.CacheEvict;
@@ -17,6 +20,7 @@ import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.mapper.CompanyMapper;
 
 import java.util.List;
+import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -27,6 +31,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class CompanyController {
     CompanyService companyService;
     CompanyMapper companyMapper;
+    Validator validator;
 
     @QueryMapping
     public List<CompanyDto> companies() {
@@ -40,6 +45,10 @@ public class CompanyController {
 
     @MutationMapping
     public CompanyDto createCompany(@Argument("input") @Valid CompanyInputDto companyInputDto) {
+        Set<ConstraintViolation<CompanyInputDto>> violations = validator.validate(companyInputDto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         return companyMapper.toCompanyDto(companyService.create(companyInputDto));
     }
 

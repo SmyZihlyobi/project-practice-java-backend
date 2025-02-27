@@ -3,7 +3,10 @@ package xyz.demorgan.projectpractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +23,7 @@ import xyz.demorgan.projectpractice.store.dto.input.FilesToProjectUploadDto;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Set;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,6 +34,7 @@ import java.util.HashMap;
 @Validated
 public class PresentationController {
     PresentationService presentationService;
+    Validator validator;
 
     @Operation(summary = "Get presentation", description = "Get presentation by file name")
     @GetMapping("/presentation/{fileName}")
@@ -49,6 +54,10 @@ public class PresentationController {
     @Operation(summary = "Upload presentation", description = "Upload presentation for project")
     @PostMapping(value = "/presentation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadPresentation(@ModelAttribute @Valid FilesToProjectUploadDto FilesToProjectUploadDto) {
+        Set<ConstraintViolation<FilesToProjectUploadDto>> violations = validator.validate(FilesToProjectUploadDto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         log.info("Uploading presentation for project {}", FilesToProjectUploadDto.getProjectId());
         return presentationService.uploadPresentation(FilesToProjectUploadDto.getProjectId(), FilesToProjectUploadDto.getFile());
     }

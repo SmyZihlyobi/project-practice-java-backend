@@ -3,7 +3,10 @@ package xyz.demorgan.projectpractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +19,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.demorgan.projectpractice.service.ResumeService;
+import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 import xyz.demorgan.projectpractice.store.dto.input.ResumeUploadRequest;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Set;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,6 +35,7 @@ import java.util.HashMap;
 @RequestMapping("api/v1/files")
 public class ResumeController {
     ResumeService resumeService;
+    Validator validator;
 
     @Operation(summary = "Get resume", description = "Get resume by file name")
     @GetMapping("/resume/{fileName}")
@@ -49,6 +55,10 @@ public class ResumeController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadResume(@ModelAttribute @Valid ResumeUploadRequest resumeUploadRequest) {
+        Set<ConstraintViolation<ResumeUploadRequest>> violations = validator.validate(resumeUploadRequest);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         log.info("Uploading resume for user {}", resumeUploadRequest.getUserId());
         return resumeService.uploadResume(resumeUploadRequest.getUserId(), resumeUploadRequest.getFile());
     }

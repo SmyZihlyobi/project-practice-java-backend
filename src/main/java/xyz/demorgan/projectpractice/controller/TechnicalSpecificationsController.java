@@ -3,7 +3,10 @@ package xyz.demorgan.projectpractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +23,7 @@ import xyz.demorgan.projectpractice.store.dto.input.FilesToProjectUploadDto;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Set;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,6 +34,7 @@ import java.util.HashMap;
 @RequestMapping("api/v1/files")
 public class TechnicalSpecificationsController {
     TechnicalSpecificationsService technicalSpecificationsService;
+    Validator validator;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @Operation(summary = "Get technicalSpecifications", description = "Get technicalSpecifications by file name")
@@ -49,7 +54,12 @@ public class TechnicalSpecificationsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @Operation(summary = "Upload technicalSpecifications", description = "Upload technicalSpecifications for project")
     @PostMapping(value = "/technicalSpecifications", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
     public ResponseEntity<?> uploadTechnicalSpecifications(@ModelAttribute @Valid FilesToProjectUploadDto FilesToProjectUploadDto) {
+        Set<ConstraintViolation<FilesToProjectUploadDto>> violations = validator.validate(FilesToProjectUploadDto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         log.info("Uploading technicalSpecifications for project {}", FilesToProjectUploadDto.getProjectId());
         return technicalSpecificationsService.uploadTechnicalSpecifications(FilesToProjectUploadDto.getProjectId(), FilesToProjectUploadDto.getFile());
     }

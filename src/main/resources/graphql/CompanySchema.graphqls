@@ -4,7 +4,7 @@ type Company {
     representative: String!
     contacts: String!
     email: String!
-    isStudentCompany: Boolean!
+    studentCompany: Boolean!
     createdAt: String!
     projects: [Project!]!
 }
@@ -14,7 +14,7 @@ input CompanyInput {
     representative: String!
     email: String!
     contacts: String!
-    isStudentCompany: Boolean!
+    studentCompany: Boolean!
 }
 
 extend type Query {

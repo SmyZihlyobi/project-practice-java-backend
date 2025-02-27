@@ -3,7 +3,10 @@ package xyz.demorgan.projectpractice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.demorgan.projectpractice.service.CompanyService;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true)
@@ -26,6 +32,7 @@ import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 @Validated
 public class CompanyAuthController {
     CompanyService companyService;
+    Validator validator;
 
     public final static String LOGIN = "/company/login";
     public final static String APPROVE_COMPANY = "/company/approve";
@@ -43,6 +50,10 @@ public class CompanyAuthController {
     @PostMapping(LOGIN)
     @Operation(summary = "Login company", description = "Login company by email and password")
     public ResponseEntity<?> login(@RequestBody @Valid CompanyLoginDto companyLoginDto) {
+        Set<ConstraintViolation<CompanyLoginDto>> violations = validator.validate(companyLoginDto);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         return companyService.login(companyLoginDto);
     }
 
