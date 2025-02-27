@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.demorgan.projectpractice.service.TechnicalSpecificationsService;
 import xyz.demorgan.projectpractice.store.dto.input.FilesToProjectUploadDto;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 @RestController
 @Tag(name = "TechnicalSpecifications controller", description = "Controller for uploading, downloading and deleting technicalSpecifications")
 @Slf4j
+@Validated
 @RequestMapping("api/v1/files")
 public class TechnicalSpecificationsController {
     TechnicalSpecificationsService technicalSpecificationsService;

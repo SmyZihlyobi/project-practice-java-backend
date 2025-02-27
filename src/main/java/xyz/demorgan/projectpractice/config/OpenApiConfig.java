@@ -25,11 +25,11 @@ public class OpenApiConfig {
                 .info(new Info()
                 .title("Project Practice REST part of API")
                 .version("1.0")
-                .contact(new Contact()
-                        .name("Support Team")
-                        .email("iknt@psu.ru"))
-                .contact(new Contact()
-                        .name("Dev Team")
-                        .url("https://t.me/Demorganbtw")));
+                        .contact(new Contact()
+                                .name("""
+                                            Support Team iknt@psu.ru
+                                            Dev Team @Demorganbtw
+                                            """)
+                                .url("https://t.me/Demorganbtw")));
     }
 }

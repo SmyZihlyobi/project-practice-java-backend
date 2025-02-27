@@ -8,6 +8,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.StudentService;
 import xyz.demorgan.projectpractice.store.dto.StudentDto;
 import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
@@ -18,6 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @AllArgsConstructor
 @Controller
+@Validated
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class StudentController {
     StudentService studentService;

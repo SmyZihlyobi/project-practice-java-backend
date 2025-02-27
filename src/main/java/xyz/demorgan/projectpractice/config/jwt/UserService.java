@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.entity.Company;
 import xyz.demorgan.projectpractice.store.repos.CompanyRepository;
 
@@ -26,7 +25,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Company user = companyRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFound("User Not Found with email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
 
         return new User(
                 user.getEmail(),

@@ -11,6 +11,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.ProjectService;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
@@ -21,6 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @AllArgsConstructor
 @Controller
+@Validated
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class ProjectController {
     HttpServletRequest request;

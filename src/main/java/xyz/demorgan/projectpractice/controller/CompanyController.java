@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.CompanyService;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
 import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
@@ -22,6 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Controller
 @FieldDefaults(level = PRIVATE, makeFinal = true)
+@Validated
 public class CompanyController {
     CompanyService companyService;
     CompanyMapper companyMapper;

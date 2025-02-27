@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.demorgan.projectpractice.service.PresentationService;
 import xyz.demorgan.projectpractice.store.dto.input.FilesToProjectUploadDto;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 @Tag(name = "Presentation controller", description = "Controller for uploading, downloading and deleting presentations")
 @Slf4j
 @RequestMapping("api/v1/files")
+@Validated
 public class PresentationController {
     PresentationService presentationService;
 

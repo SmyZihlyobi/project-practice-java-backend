@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.demorgan.projectpractice.service.ResumeService;
 import xyz.demorgan.projectpractice.store.dto.input.ResumeUploadRequest;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 @Slf4j
+@Validated
 @Tag(name = "Resume controller", description = "Controller for uploading, downloading and deleting resumes")
 @RequestMapping("api/v1/files")
 public class ResumeController {
