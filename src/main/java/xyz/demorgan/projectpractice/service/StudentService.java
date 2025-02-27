@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.StudentDto;
 import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
@@ -28,6 +29,7 @@ public class StudentService {
     private final StudentMapper studentMapper;
     StudentRepository studentRepository;
     TeamRepository teamRepository;
+    JwtTokenUtils jwtTokenUtils;
 
     public List<StudentDto> getAll() {
         log.info("Getting all students at {}", System.currentTimeMillis());
@@ -70,5 +72,22 @@ public class StudentService {
                 .orElseThrow(() -> new NotFound("Student with id " + id + " not found"));
         studentRepository.delete(student);
         return studentMapper.toStudentDto(student);
+    }
+
+    @Transactional
+    public StudentDto changeTeam(String jwtToken, Long teamId) {
+        log.info("Changing student team at {}", System.currentTimeMillis());
+        String token = jwtToken.replace("Bearer ", "");
+        Long studentId = Long.valueOf(jwtTokenUtils.getIdFromToken(token));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new NotFound("Student with id " + studentId + " not found"));
+
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new NotFound("Team with id " + teamId + " not found"));
+
+        student.setTeam(team);
+
+        return studentMapper.toStudentDto(studentRepository.save(student));
     }
 }

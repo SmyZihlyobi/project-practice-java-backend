@@ -3,8 +3,6 @@ package xyz.demorgan.projectpractice.service;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -106,7 +104,7 @@ public class CompanyService {
         Company user = companyRepository.findByEmail(companyLoginDto.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + companyLoginDto.getEmail()));
 
-        String token = jwtTokenUtils.generateToken(user);
+        String token = jwtTokenUtils.generateCompanyToken(user);
 
         return ResponseEntity.ok(new LoginAnswer(token));
     }

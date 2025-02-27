@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -7,6 +8,8 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.StudentService;
@@ -23,6 +26,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class StudentController {
     StudentService studentService;
+    HttpServletRequest request;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @QueryMapping
@@ -45,5 +49,15 @@ public class StudentController {
     @MutationMapping
     public StudentDto deleteStudent(@Argument Long id) {
         return studentService.deleteStudent(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
+    @MutationMapping
+    public StudentDto changeStudentTeam(@Argument Long teamId) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            throw new RuntimeException("Authorization header is null");
+        }
+        return studentService.changeTeam(token, teamId);
     }
 }

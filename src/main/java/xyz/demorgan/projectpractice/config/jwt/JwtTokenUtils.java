@@ -17,7 +17,7 @@ public class JwtTokenUtils {
     private final Duration lifetime = Duration.ofDays(30);
     private final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    public String generateToken(Company company) {
+    public String generateCompanyToken(Company company) {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put("roles", company.getRoles());
