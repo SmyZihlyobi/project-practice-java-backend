@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.store.repos;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findAllByOrderByTeamNameAsc();
 
     @Modifying
-    @Query("UPDATE Student s SET s.resumePdf = NULL")
+    @Transactional
+    @Query("UPDATE Student s SET s.resumePdf = null")
     void updateResumePdfToNull();
 }
