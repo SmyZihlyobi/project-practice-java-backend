@@ -117,7 +117,7 @@ public class CompanyService {
         company.setPassword(passwordEncoder.encode(generatedPassword));
         companyRepository.save(company);
 
-        emailService.sendEmail(generatedPassword); // ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
+        emailService.sendEmail(generatedPassword); // TODO ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
     }
 
     private String generateRandomPassword() {

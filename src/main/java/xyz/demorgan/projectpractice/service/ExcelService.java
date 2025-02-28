@@ -60,7 +60,7 @@ public class ExcelService {
         for (Student student : students) {
             Row row = sheet.createRow(rowNum++);
 
-            if (student.getTeamName() == null || !student.getTeamName().equals(previousTeam)) {
+            if (student.getTeamName().equals("Не выбрана") || !student.getTeamName().equals(previousTeam)) {
                 styleIndex = (styleIndex + 1) % 2;
                 previousTeam = student.getTeamName();
             }
