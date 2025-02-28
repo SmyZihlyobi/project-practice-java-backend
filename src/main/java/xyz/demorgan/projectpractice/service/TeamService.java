@@ -42,16 +42,20 @@ public class TeamService {
     }
 
     @Transactional
-    public void deleteTeam(Long id) {
+    public TeamDto deleteTeam(Long id) {
         log.info("Deleting team with id: {} at {}", id, System.currentTimeMillis());
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new NotFound("Team with id " + id + " not found"));
 
+        String defaultTeamName = "Не выбрана";
+        Team defaultTeam = teamRepository.findByNameIgnoreCase(defaultTeamName);
+
         List<Student> students = studentRepository.findAllByTeam(team);
         for (Student student : students) {
-            student.setTeam(null);
+            student.setTeam(defaultTeam);
             studentRepository.save(student);
         }
         teamRepository.delete(team);
+        return teamMapper.toTeamDto(team);
     }
 }

@@ -32,7 +32,7 @@ public class TeamController {
     }
 
     @MutationMapping
-    public void deleteTeam(@Argument Long id) {
-        teamService.deleteTeam(id);
+    public TeamDto deleteTeam(@Argument Long id) {
+        return teamService.deleteTeam(id);
     }
 }
