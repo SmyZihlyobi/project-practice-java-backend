@@ -1,7 +1,7 @@
 package xyz.demorgan.projectpractice.config;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,11 +29,21 @@ import java.util.List;
 @Slf4j
 @EnableWebSecurity
 @Configuration
-@AllArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
     UserService userService;
     JwtFilter jwtFilter;
+
+    @Value("${client.ip}")
+    private String clientIp;
+    @Value("${client.dns}")
+    private String clientDns;
+
+    public SecurityConfig(UserService userService, JwtFilter jwtFilter) {
+        this.userService = userService;
+        this.jwtFilter = jwtFilter;
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,6 +68,8 @@ public class SecurityConfig {
                 "http://localhost:*",
                 "http://62.233.43.154:*",
                 "http://62.233.43.154",
+                clientIp,
+                clientDns,
                 "http://127.0.0.1:*"
         ));
 

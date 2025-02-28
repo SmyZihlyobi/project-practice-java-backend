@@ -19,6 +19,8 @@ services:
       COMPANY_DEFAULT_EMAIL: iknt@docker.ru
       COMPANY_DEFAULT_PASSWORD: docker_password
       REDIS_HOST: redis
+      CLIENT_IP: http://62.233.43.154
+      CLIENT_DNS: http://localhost
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
       interval: 30s

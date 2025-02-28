@@ -48,6 +48,10 @@ springdoc:
     enabled: true
     path: /v3/api-docs
 
+client:
+  ip: ${CLIENT_IP:http://62.233.43.154}
+  dns: ${CLIENT_DNS:http://localhost}
+
 company:
   default:
     email: ${COMPANY_DEFAULT_EMAIL:iknt@psu.ru}
