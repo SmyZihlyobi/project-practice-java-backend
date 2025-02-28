@@ -168,7 +168,7 @@ public class ExcelService {
         // Резюме
         if (student.getResumePdf() != null) {
             String baseUrl = clientip.startsWith("http") ? clientip : "http://" + clientip;
-            String url = baseUrl + "/api/v1/files/resume/" + student.getResumePdf();
+            String url = baseUrl + ":8080/api/v1/files/resume/" + student.getResumePdf();
 
             CreationHelper createHelper = workbook.getCreationHelper();
             Cell cell = row.createCell(colNum++);
