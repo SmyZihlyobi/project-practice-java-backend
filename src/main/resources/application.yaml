@@ -50,7 +50,6 @@ springdoc:
 
 client:
   ip: ${CLIENT_IP:http://62.233.43.154}
-  dns: ${CLIENT_DNS:http://localhost}
 
 company:
   default:

@@ -20,7 +20,6 @@ services:
       COMPANY_DEFAULT_PASSWORD: docker_password
       REDIS_HOST: redis
       CLIENT_IP: http://62.233.43.154
-      CLIENT_DNS: http://localhost
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
       interval: 30s
@@ -68,26 +67,6 @@ services:
     volumes:
       - minio_data:/data
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    restart: always
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:80/misc/ping || exit -1
-      interval: 10s
-      timeout: 5s
-      start_period: 10s
-      retries: 5
-    depends_on:
-      - postgres
 
   redis:
     image: redis:latest
@@ -104,4 +83,3 @@ services:
 volumes:
   postgres_data:
   minio_data:
-  pgadmin_data:

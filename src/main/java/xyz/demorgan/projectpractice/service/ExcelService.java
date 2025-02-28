@@ -1,5 +1,9 @@
 package xyz.demorgan.projectpractice.service;
 
+import lombok.RequiredArgsConstructor;
+import org.apache.poi.common.usermodel.HyperlinkType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,11 +17,16 @@ import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 import java.util.List;
 
 @Service
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@AllArgsConstructor
 public class ExcelService {
 
     StudentRepository studentRepository;
+
+    @Value("${client.ip}")
+    private String clientip;
+
+    public ExcelService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Workbook exportStudents() {
         List<Student> students = studentRepository.findAllByOrderByTeamNameAsc();
@@ -61,7 +70,7 @@ public class ExcelService {
                 previousTeam = student.getTeamName();
             }
 
-            fillStudentRow(student, row, rowStyles[styleIndex]);
+            fillStudentRow(student, row, rowStyles[styleIndex], workbook);
         }
 
         int[] widths = {
@@ -132,7 +141,7 @@ public class ExcelService {
         }
     }
 
-    private void fillStudentRow(Student student, Row row, CellStyle style) {
+    private void fillStudentRow(Student student, Row row, CellStyle style, Workbook workbook) {
         int colNum = 0;
 
         // Счётчик
@@ -157,7 +166,29 @@ public class ExcelService {
         createCell(row, colNum++, student.getTelegram(), style);
 
         // Резюме
-        createCell(row, colNum++, student.getResumePdf() != null ? "прикреплено" : "", style);
+        if (student.getResumePdf() != null) {
+            String baseUrl = clientip.startsWith("http") ? clientip : "http://" + clientip;
+            String url = baseUrl + "/api/v1/files/resume/" + student.getResumePdf();
+
+            CreationHelper createHelper = workbook.getCreationHelper();
+            Cell cell = row.createCell(colNum++);
+            cell.setCellValue("прикреплено");
+
+            Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
+            hyperlink.setAddress(url);
+            cell.setHyperlink(hyperlink);
+
+            // Стиль для гиперссылки
+            CellStyle hyperlinkStyle = workbook.createCellStyle();
+            hyperlinkStyle.cloneStyleFrom(style);
+            Font font = workbook.createFont();
+            font.setUnderline(Font.U_SINGLE);
+            font.setColor(IndexedColors.BLUE.getIndex());
+            hyperlinkStyle.setFont(font);
+            cell.setCellStyle(hyperlinkStyle);
+        } else {
+            createCell(row, colNum++, "", style);
+        }
         createCell(row, colNum++, student.getResumeLink(), style);
 
         // Команда

@@ -36,8 +36,6 @@ public class SecurityConfig {
 
     @Value("${client.ip}")
     private String clientIp;
-    @Value("${client.dns}")
-    private String clientDns;
 
     public SecurityConfig(UserService userService, JwtFilter jwtFilter) {
         this.userService = userService;
@@ -69,7 +67,6 @@ public class SecurityConfig {
                 "http://62.233.43.154:*",
                 "http://62.233.43.154",
                 clientIp,
-                clientDns,
                 "http://127.0.0.1:*"
         ));
 
