@@ -70,7 +70,7 @@ public class CompanyService {
 
     public void approveCompany(Long companyId) {
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+                .orElseThrow(() -> new NotFound("Company not found"));
 
         String generatedPassword = generateRandomPassword();
         company.setPassword(passwordEncoder.encode(generatedPassword));
@@ -102,7 +102,7 @@ public class CompanyService {
 
         log.info("User {} authenticated", companyLoginDto.getEmail());
         Company user = companyRepository.findByEmail(companyLoginDto.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + companyLoginDto.getEmail()));
+                .orElseThrow(() -> new NotFound("User not found with email: " + companyLoginDto.getEmail()));
 
         String token = jwtTokenUtils.generateCompanyToken(user);
 
