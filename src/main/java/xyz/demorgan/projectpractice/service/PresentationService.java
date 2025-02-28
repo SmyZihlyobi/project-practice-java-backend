@@ -112,9 +112,11 @@ public class PresentationService {
                     .bucket(bucketName)
                     .object(item.objectName())
                     .build());
-            System.out.println("Удален объект: " + item.objectName());
+            log.info("Удален объект: {}", item.objectName());
         }
 
-        System.out.println("Все объекты из бакета " + bucketName + " успешно удалены.");
+        projectRepository.updatePresentationToNull();
+
+        log.info("Все объекты из бакета {} успешно удалены.", bucketName);
     }
 }

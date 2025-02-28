@@ -120,6 +120,8 @@ public class ResumeService {
             log.info("Удален объект: {}", item.objectName());
         }
 
+        studentRepository.updateResumePdfToNull();
+
         log.info("Все объекты из бакета {} успешно удалены.", bucketName);
     }
 
