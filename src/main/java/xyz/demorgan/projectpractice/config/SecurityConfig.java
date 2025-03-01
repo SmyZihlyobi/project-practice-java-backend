@@ -21,7 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import xyz.demorgan.projectpractice.config.jwt.JwtFilter;
-import xyz.demorgan.projectpractice.config.jwt.UserService;
+import xyz.demorgan.projectpractice.config.jwt.CompanyDetailsService;
 
 import java.util.List;
 
@@ -31,13 +31,13 @@ import java.util.List;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-    UserService userService;
+    CompanyDetailsService userService;
     JwtFilter jwtFilter;
 
     @Value("${client.ip}")
     private String clientIp;
 
-    public SecurityConfig(UserService userService, JwtFilter jwtFilter) {
+    public SecurityConfig(CompanyDetailsService userService, JwtFilter jwtFilter) {
         this.userService = userService;
         this.jwtFilter = jwtFilter;
     }

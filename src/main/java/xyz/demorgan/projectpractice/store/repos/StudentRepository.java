@@ -14,6 +14,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findAllByTeam(Team team);
 
+    @Query("SELECT s FROM Student s " +
+            "ORDER BY " +
+            "CASE WHEN LOWER(s.team.name) = 'не выбрана' THEN 1 ELSE 0 END, " +
+            "s.team.name ASC")
     List<Student> findAllByOrderByTeamNameAsc();
 
     @Modifying

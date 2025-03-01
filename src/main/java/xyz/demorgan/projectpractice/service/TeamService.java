@@ -32,7 +32,7 @@ public class TeamService {
 
     public List<TeamDto> getAll() {
         log.info("Getting all teams at {}", System.currentTimeMillis());
-        return teamRepository.findAll()
+        return teamRepository.findAllByOrderByNameAsc()
                 .stream()
                 .map(teamMapper::toTeamDto)
                 .collect(Collectors.toList());

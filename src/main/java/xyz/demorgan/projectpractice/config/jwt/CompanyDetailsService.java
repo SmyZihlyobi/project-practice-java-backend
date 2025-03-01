@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class UserService implements UserDetailsService {
+public class CompanyDetailsService implements UserDetailsService {
     CompanyRepository companyRepository;
 
     @Override
