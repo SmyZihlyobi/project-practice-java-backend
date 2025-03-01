@@ -8,9 +8,10 @@ import xyz.demorgan.projectpractice.store.entity.Student;
 import xyz.demorgan.projectpractice.store.entity.Team;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    Student findByResumePdf(String resumePdf);
+    Optional<Student> findByResumePdf(String resumePdf);
 
     List<Student> findAllByTeam(Team team);
 

@@ -22,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -89,9 +90,11 @@ public class ResumeService {
 
             minioClient.removeObject(removeObjectArgs);
 
-            Student student = studentRepository.findByResumePdf(fileName);
-            student.setResumePdf(null);
-            studentRepository.save(student);
+            Optional<Student> student = studentRepository.findByResumePdf(fileName);
+            if (student.isPresent()) {
+                student.get().setResumePdf(null);
+                studentRepository.save(student.get());
+            }
 
             return ResponseEntity.ok().body("Resume deleted successfully");
         } catch (Exception e) {
