@@ -8,16 +8,13 @@ import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.ProjectService;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
-import xyz.demorgan.projectpractice.store.dto.input.FilesToProjectUploadDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 
 import java.util.List;
