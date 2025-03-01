@@ -42,7 +42,8 @@ public class CompanyService {
 
     public List<CompanyDto> getAll() {
         log.info("Getting all companies at {}", System.currentTimeMillis());
-        return companyRepository.findAll()
+        return companyRepository.findAllApprovedCompanies()
+                .orElseThrow(() -> new NotFound("No approved companies found"))
                 .stream()
                 .map(companyMapper::toCompanyDto)
                 .collect(Collectors.toList());

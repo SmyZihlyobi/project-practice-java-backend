@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.demorgan.projectpractice.store.entity.Company;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Transactional
     @Query("SELECT c FROM Company c WHERE c.password IS NULL")
     Optional<List<Company>> findUnapprovedCompanies();
+
+    @Transactional
+    @Query("SELECT c FROM Company c WHERE c.password IS NOT NULL")
+    Optional<List<Company>> findAllApprovedCompanies();
 }
