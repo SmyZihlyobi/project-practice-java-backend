@@ -41,6 +41,11 @@ public class CompanyController {
     public CompanyDto company(@Argument Long id) {
         return companyService.getById(id);
     }
+    // TODO - Секьюрность
+    @QueryMapping
+    public List<CompanyDto> unapprovedCompanies() {
+        return companyService.findUnapprovedCompanies();
+    }
 
     @MutationMapping
     public CompanyDto createCompany(@Argument("input") @Valid CompanyInputDto companyInputDto) {

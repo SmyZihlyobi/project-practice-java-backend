@@ -127,6 +127,15 @@ public class CompanyService {
         emailService.sendEmail(generatedPassword); // TODO ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
     }
 
+    public List<CompanyDto> findUnapprovedCompanies() {
+        log.info("Getting unapproved companies at {}", System.currentTimeMillis());
+        return companyRepository.findUnapprovedCompanies()
+                .orElseThrow(() -> new NotFound("No unapproved companies found"))
+                .stream()
+                .map(companyMapper::toCompanyDto)
+                .collect(Collectors.toList());
+    }
+
     private String generateRandomPassword() {
         int length = 15;
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
