@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.TeamDto;
@@ -48,14 +49,26 @@ public class TeamService {
                 .orElseThrow(() -> new NotFound("Team with id " + id + " not found"));
 
         String defaultTeamName = "Не выбрана";
+
+        if (team.getName().equalsIgnoreCase(defaultTeamName)) {
+            throw new IllegalArgumentException("Нельзя удалить команду по умолчанию");
+        }
+
         Team defaultTeam = teamRepository.findByNameIgnoreCase(defaultTeamName);
+        if (defaultTeam == null) {
+            defaultTeam = new Team();
+            defaultTeam.setName(defaultTeamName);
+            teamRepository.save(defaultTeam);
+            teamRepository.flush();
+        }
 
         List<Student> students = studentRepository.findAllByTeam(team);
-        for (Student student : students) {
-            student.setTeam(defaultTeam);
-            studentRepository.save(student);
-        }
+        Team finalDefaultTeam = defaultTeam;
+        students.forEach(student -> student.setTeam(finalDefaultTeam));
+        studentRepository.saveAll(students);
+
         teamRepository.delete(team);
+
         return teamMapper.toTeamDto(team);
     }
 }

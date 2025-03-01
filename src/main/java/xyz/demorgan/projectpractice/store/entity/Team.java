@@ -23,6 +23,6 @@ public class Team implements Serializable {
     @Column(name = "name", nullable = false)
     String name;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     List<Student> students;
 }
