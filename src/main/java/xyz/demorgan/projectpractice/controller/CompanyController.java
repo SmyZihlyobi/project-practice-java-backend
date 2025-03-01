@@ -18,6 +18,7 @@ import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.mapper.CompanyMapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -54,5 +55,11 @@ public class CompanyController {
     @MutationMapping
     public CompanyDto deleteCompany(@Argument("id") Long id) {
         return companyService.delete(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @MutationMapping
+    public Map<String, String> deleteAllCompanies() {
+        return companyService.deleteAllCompanies();
     }
 }

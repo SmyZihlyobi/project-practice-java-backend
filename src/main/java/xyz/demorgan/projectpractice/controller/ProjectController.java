@@ -21,6 +21,7 @@ import xyz.demorgan.projectpractice.store.dto.input.FilesToProjectUploadDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -62,5 +63,11 @@ public class ProjectController {
     @MutationMapping
     public void deleteProject(@Argument("id") Long id) {
         projectService.delete(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @MutationMapping
+    public Map<String, String> deleteAllProjects() {
+        return projectService.deleteAllProjects();
     }
 }

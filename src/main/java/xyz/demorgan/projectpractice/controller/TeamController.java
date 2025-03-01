@@ -10,6 +10,7 @@ import xyz.demorgan.projectpractice.service.TeamService;
 import xyz.demorgan.projectpractice.store.dto.TeamDto;
 
 import java.util.List;
+import java.util.Map;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -32,5 +33,10 @@ public class TeamController {
     @MutationMapping
     public TeamDto deleteTeam(@Argument Long id) {
         return teamService.deleteTeam(id);
+    }
+
+    @MutationMapping
+    public Map<String, String> deleteAllTeams() {
+        return teamService.deleteAllTeams();
     }
 }

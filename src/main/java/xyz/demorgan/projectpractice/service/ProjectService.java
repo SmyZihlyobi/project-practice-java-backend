@@ -18,6 +18,7 @@ import xyz.demorgan.projectpractice.store.repos.ProjectRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -71,5 +72,13 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
         projectRepository.delete(project);
+    }
+
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public Map<String, String> deleteAllProjects() {
+        log.info("Deleting all projects at {}", System.currentTimeMillis());
+        projectRepository.deleteAll();
+        return Map.of("message", "All projects deleted");
     }
 }

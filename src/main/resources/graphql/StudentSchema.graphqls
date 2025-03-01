@@ -40,5 +40,6 @@ type Query {
 extend type Mutation {
     createStudent(input: StudentInput!): Student
     deleteStudent(id: ID!): Student
+    deleteAllStudents(): Student
     changeStudentTeam(teamId: ID!): Student
 }

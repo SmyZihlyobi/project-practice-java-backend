@@ -14,7 +14,9 @@ import xyz.demorgan.projectpractice.store.mapper.TeamMapper;
 import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 import xyz.demorgan.projectpractice.store.repos.TeamRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -70,5 +72,41 @@ public class TeamService {
         teamRepository.delete(team);
 
         return teamMapper.toTeamDto(team);
+    }
+
+    @Transactional
+    public Map<String, String> deleteAllTeams() {
+        log.info("Deleting all teams at {}", System.currentTimeMillis());
+        Map<String, String> response = new HashMap<>();
+        String defaultTeamName = "Не выбрана";
+
+        try {
+            Team defaultTeam = teamRepository.findByNameIgnoreCase(defaultTeamName);
+            if (defaultTeam == null) {
+                defaultTeam = new Team();
+                defaultTeam.setName(defaultTeamName);
+                teamRepository.save(defaultTeam);
+                teamRepository.flush();
+            }
+
+            List<Team> teams = teamRepository.findAll();
+            teams.removeIf(team -> team.getName().equalsIgnoreCase(defaultTeamName));
+
+            for (Team team : teams) {
+                List<Student> students = studentRepository.findAllByTeam(team);
+                for (Student student : students) {
+                    student.setTeam(defaultTeam);
+                    studentRepository.save(student);
+                }
+                teamRepository.delete(team);
+            }
+
+            response.put("message", "Все команды успешно удалены, кроме команды по умолчанию.");
+        } catch (Exception e) {
+            log.error("Error deleting all teams: {}", e.getMessage());
+            response.put("message", "Ошибка при удалении команд: " + e.getMessage());
+        }
+
+        return response;
     }
 }

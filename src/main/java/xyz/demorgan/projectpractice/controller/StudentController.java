@@ -11,16 +11,14 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import xyz.demorgan.projectpractice.service.StudentService;
 import xyz.demorgan.projectpractice.store.dto.StudentDto;
-import xyz.demorgan.projectpractice.store.dto.input.ResumeUploadRequest;
 import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -59,6 +57,12 @@ public class StudentController {
     @MutationMapping
     public StudentDto deleteStudent(@Argument Long id) {
         return studentService.deleteStudent(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @MutationMapping
+    public Map<String, String> deleteAllStudents() {
+        return studentService.deleteAllStudents();
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")

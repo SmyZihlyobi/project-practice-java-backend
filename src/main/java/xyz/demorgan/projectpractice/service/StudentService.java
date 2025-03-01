@@ -16,7 +16,9 @@ import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 import xyz.demorgan.projectpractice.store.repos.TeamRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -82,6 +84,20 @@ public class StudentService {
                 .orElseThrow(() -> new NotFound("Student with id " + id + " not found"));
         studentRepository.delete(student);
         return studentMapper.toStudentDto(student);
+    }
+
+    @Transactional
+    public Map<String, String> deleteAllStudents() {
+        log.info("Deleting all students at {}", System.currentTimeMillis());
+        Map<String, String> response = new HashMap<>();
+        try {
+            studentRepository.deleteAll();
+            response.put("message", "Все студенты успешно удалены.");
+        } catch (Exception e) {
+            log.error("Error deleting all students: {}", e.getMessage());
+            response.put("message", "Ошибка при удалении студентов: " + e.getMessage());
+        }
+        return response;
     }
 
     @Transactional
