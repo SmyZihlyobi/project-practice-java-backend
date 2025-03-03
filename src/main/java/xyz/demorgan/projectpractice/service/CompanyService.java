@@ -1,8 +1,9 @@
 package xyz.demorgan.projectpractice.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,16 +30,19 @@ import java.util.stream.Collectors;
 import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
-@FieldDefaults(level = PRIVATE, makeFinal = true)
+@FieldDefaults(level = PRIVATE)
 public class CompanyService {
-    CompanyMapper companyMapper;
-    PasswordEncoder passwordEncoder;
-    CompanyRepository companyRepository;
-    AuthenticationManager authenticationManager;
-    JwtTokenUtils jwtTokenUtils;
-    EmailService emailService;
+    final CompanyMapper companyMapper;
+    final PasswordEncoder passwordEncoder;
+    final CompanyRepository companyRepository;
+    final AuthenticationManager authenticationManager;
+    final JwtTokenUtils jwtTokenUtils;
+    final EmailService emailService;
+
+    @Value("${company.default.email}")
+    private String adminEmail;
 
     public List<CompanyDto> getAll() {
         log.info("Getting all companies at {}", System.currentTimeMillis());
@@ -72,7 +76,7 @@ public class CompanyService {
 
     public Map<String, String> deleteAllCompanies() {
         log.info("Deleting all companies at {}", System.currentTimeMillis());
-        companyRepository.deleteAll();
+        companyRepository.deleteAllExceptAdmin(1L, adminEmail);
         return Map.of("message", "All companies deleted");
     }
 
