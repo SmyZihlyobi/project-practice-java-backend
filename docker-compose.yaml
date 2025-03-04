@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   project-practice:
     image: project-practice:latest
@@ -9,17 +11,17 @@ services:
     ports:
       - "8080:8080"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres_secret
-      POSTGRES_DB: project-practice-api
-      DB_HOST: postgres
-      MINIO_ROOT_USER: 7fcc12fdc2d1
-      MINIO_ROOT_PASSWORD: 96a19220ee73
-      MINIO_ENDPOINT: http://minio:9000
-      COMPANY_DEFAULT_EMAIL: iknt@docker.ru
-      COMPANY_DEFAULT_PASSWORD: docker_password
-      REDIS_HOST: redis
-      CLIENT_IP: http://62.233.43.154
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DB_HOST: ${DB_HOST}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      COMPANY_DEFAULT_EMAIL: ${COMPANY_DEFAULT_EMAIL}
+      COMPANY_DEFAULT_PASSWORD: ${COMPANY_DEFAULT_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      CLIENT_IP: ${CLIENT_IP}
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
       interval: 30s
@@ -39,9 +41,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres_secret
-      POSTGRES_DB: project-practice-api
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     healthcheck:
       test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
       interval: 10s
@@ -56,8 +58,8 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: 7fcc12fdc2d1
-      MINIO_ROOT_PASSWORD: 96a19220ee73
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     command: server /data --console-address ":9001"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
@@ -67,10 +69,7 @@ services:
     volumes:
       - minio_data:/data
 
-
   redis:
-    image: redis:latest
-    restart: always
     ports:
       - "6379:6379"
     healthcheck:
