@@ -3,6 +3,7 @@ package xyz.demorgan.projectpractice.store.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,6 +16,8 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Project implements Serializable {
     @Id
+    @GeneratedValue(generator = "project_gen")
+    @GenericGenerator(name = "project_gen", strategy = "xyz.demorgan.projectpractice.store.repos.ProjectIdGenerator")
     @Column(name = "id", nullable = false)
     Long id;
 
@@ -37,7 +40,7 @@ public class Project implements Serializable {
     String presentation;
 
     @Column(name = "is_student_project", columnDefinition = "boolean default false", nullable = false)
-    boolean isStudentProject;
+    boolean studentProject;
 
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
@@ -48,5 +51,6 @@ public class Project implements Serializable {
     @ManyToOne
     @JoinColumn(name = "company_id")
     Company company;
+
 }
 

@@ -21,10 +21,10 @@ public class Student implements Serializable {
     Long id;
 
     @Column(name = "team_name")
-    String team_name;
+    String teamName;
 
     @Column(name = "group_id", nullable = false)
-    String group_id;
+    String groupId;
 
     @Column(name = "year", nullable = false)
     int year;

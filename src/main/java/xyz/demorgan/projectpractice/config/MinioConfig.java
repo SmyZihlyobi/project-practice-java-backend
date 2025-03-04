@@ -57,7 +57,7 @@ public class MinioConfig {
     @Bean
     public boolean initializeTechnicalSpecificationsBucket(MinioClient minioClient) {
         try {
-            String bucketName = "technical_specifications";
+            String bucketName = "technical-specifications";
             boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (!isExist) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());

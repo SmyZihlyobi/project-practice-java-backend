@@ -8,3 +8,8 @@ extend type Query {
     team(id: ID!): Team
     teams: [Team!]!
 }
+
+extend type Mutation {
+    deleteTeam(id: ID!): Team
+    deleteAllTeams: Boolean
+}

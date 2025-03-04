@@ -3,7 +3,7 @@ type Company {
     name: String!
     representative: String!
     contacts: String!
-    isStudentCompany: Boolean!
+    studentCompany: Boolean!
     createdAt: String!
     projects: [Project!]!
 }
@@ -11,11 +11,19 @@ type Company {
 input CompanyInput {
     name: String!
     representative: String!
+    email: String!
     contacts: String!
-    isStudentCompany: Boolean!
+    studentCompany: Boolean!
 }
 
 extend type Query {
     company(id: ID!): Company
     companies: [Company!]!
+    unapprovedCompanies: [Company]
+}
+
+type Mutation {
+    createCompany(input: CompanyInput!): Company
+    deleteCompany(id: ID!): Company
+    deleteAllCompanies: Boolean
 }

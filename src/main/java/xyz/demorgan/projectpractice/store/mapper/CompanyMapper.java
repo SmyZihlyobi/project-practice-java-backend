@@ -1,6 +1,7 @@
 package xyz.demorgan.projectpractice.store.mapper;
 
 import org.mapstruct.*;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
 import xyz.demorgan.projectpractice.store.entity.Company;
 
@@ -13,5 +14,8 @@ public interface CompanyMapper {
         company.getProjects().forEach(project -> project.setCompany(company));
     }
 
+    @Mapping(target = "studentCompany", expression = "java(company.isStudentCompany())")
     CompanyDto toCompanyDto(Company company);
+
+    Company toEntity(CompanyInputDto companyInputDto);
 }
