@@ -61,8 +61,8 @@ public class StudentController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
-    public Map<String, String> deleteAllStudents() {
-        return studentService.deleteAllStudents();
+    public void deleteAllStudents() {
+        studentService.deleteAllStudents();
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")

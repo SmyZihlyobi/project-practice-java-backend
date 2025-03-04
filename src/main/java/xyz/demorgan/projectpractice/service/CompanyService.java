@@ -23,7 +23,6 @@ import xyz.demorgan.projectpractice.store.repos.CompanyRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -74,10 +73,9 @@ public class CompanyService {
         return companyMapper.toCompanyDto(company);
     }
 
-    public Map<String, String> deleteAllCompanies() {
+    public void deleteAllCompanies() {
         log.info("Deleting all companies at {}", System.currentTimeMillis());
         companyRepository.deleteAllExceptAdmin(1L, adminEmail);
-        return Map.of("message", "All companies deleted");
     }
 
     public void approveCompany(Long companyId) {

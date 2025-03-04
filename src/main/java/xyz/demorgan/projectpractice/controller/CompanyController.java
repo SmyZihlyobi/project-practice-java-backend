@@ -64,7 +64,7 @@ public class CompanyController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
-    public Map<String, String> deleteAllCompanies() {
-        return companyService.deleteAllCompanies();
+    public void deleteAllCompanies() {
+        companyService.deleteAllCompanies();
     }
 }

@@ -87,17 +87,13 @@ public class StudentService {
     }
 
     @Transactional
-    public Map<String, String> deleteAllStudents() {
+    public void deleteAllStudents() {
         log.info("Deleting all students at {}", System.currentTimeMillis());
-        Map<String, String> response = new HashMap<>();
         try {
             studentRepository.deleteAll();
-            response.put("message", "Все студенты успешно удалены.");
         } catch (Exception e) {
             log.error("Error deleting all students: {}", e.getMessage());
-            response.put("message", "Ошибка при удалении студентов: " + e.getMessage());
         }
-        return response;
     }
 
     @Transactional

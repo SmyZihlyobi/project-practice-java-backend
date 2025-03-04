@@ -36,7 +36,7 @@ public class TeamController {
     }
 
     @MutationMapping
-    public Map<String, String> deleteAllTeams() {
-        return teamService.deleteAllTeams();
+    public void deleteAllTeams() {
+        teamService.deleteAllTeams();
     }
 }
