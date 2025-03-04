@@ -3,7 +3,6 @@ type Company {
     name: String!
     representative: String!
     contacts: String!
-    email: String!
     studentCompany: Boolean!
     createdAt: String!
     projects: [Project!]!
