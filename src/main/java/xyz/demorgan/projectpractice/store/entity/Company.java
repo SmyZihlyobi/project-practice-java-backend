@@ -23,7 +23,7 @@ public class Company implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     String name;
 
     @Column(name = "representative", nullable = false)
