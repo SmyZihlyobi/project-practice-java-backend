@@ -67,7 +67,8 @@ public class SecurityConfig {
                 "http://62.233.43.154:*",
                 "http://62.233.43.154",
                 clientIp,
-                "http://127.0.0.1:*"
+                "http://127.0.0.1:*",
+                "*"
         ));
 
         config.setAllowedHeaders(List.of(
