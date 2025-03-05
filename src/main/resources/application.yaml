@@ -85,6 +85,7 @@ company:
 
 logging:
   level:
+    org.springframework.mail: DEBUG
     root: info
   file:
     name: ./project-practice.log

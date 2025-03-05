@@ -36,10 +36,9 @@ public class EmailService {
     @Value("${smtp.email}")
     private String from;
 
-    @Retryable(
-            value = {MailException.class, KafkaException.class},
-            backoff = @Backoff(delay = 1000))
     @KafkaListener(topics = "company-password-email", groupId = "company-password-email")
+    @Retryable(value = {MailException.class, MessagingException.class, KafkaException.class},
+            maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void sendEmail(PasswordEvent event, Acknowledgment acknowledgment) {
         if (!isValidEvent(event)) {
             log.error("Invalid PasswordEvent received: {}", event);
