@@ -54,7 +54,6 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       acks: all
       retries: 10
-      compression-type: snappy
       properties:
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5
