@@ -32,8 +32,9 @@ spring:
   mail:
     host: ${SMTP_SERVER}
     port: ${SMTP_PORT}
-    username: ${SMTP_USERNAME}
+    username: ${SMTP_LOGIN}
     password: ${SMTP_PASSWORD}
+    protocol: smtp
     properties:
       mail:
         smtp:
