@@ -41,7 +41,6 @@ public class CompanyService {
     final CompanyRepository companyRepository;
     final AuthenticationManager authenticationManager;
     final JwtTokenUtils jwtTokenUtils;
-    final EmailService emailService;
     final KafkaTemplate<String, PasswordEvent> kafkaTemplate;
 
     @Value("${company.default.email}")
