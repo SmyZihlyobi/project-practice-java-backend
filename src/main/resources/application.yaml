@@ -15,7 +15,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${POSTGRES_DB:project-practice-api}
     username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:31702005}
+    password: ${POSTGRES_PASSWORD:postgres}
   jpa:
     hibernate:
       ddl-auto: update
@@ -92,7 +92,7 @@ client:
 
 company:
   default:
-    email: ${COMPANY_DEFAULT_EMAIL:iknt@psu.ru}
+    email: ${COMPANY_DEFAULT_EMAIL:demo@docker.ru}
     password: ${COMPANY_DEFAULT_PASSWORD:eBxYWr/PlJ8fB%Z:'vCt__[[S#{O|'}
 
 logging:
