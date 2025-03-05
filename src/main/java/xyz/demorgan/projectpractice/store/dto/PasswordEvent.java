@@ -1,11 +1,13 @@
 package xyz.demorgan.projectpractice.store.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
+@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 public class PasswordEvent {
     private String email;
