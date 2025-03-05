@@ -18,12 +18,12 @@ import xyz.demorgan.projectpractice.store.dto.PasswordEvent;
 
 import java.io.UnsupportedEncodingException;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EmailService {
-    private static final String EMAIL_TEMPLATE = "password-email";
+    private static final String APPROVAL_TEMPLATE = "approval-email";
+    private static final String PASSWORD_UPDATE_TEMPLATE = "password-update-email";
     private static final String ENCODING = "UTF-8";
 
     private final JavaMailSender mailSender;
@@ -68,11 +68,13 @@ public class EmailService {
 
         helper.setFrom(from);
         helper.setTo(event.getEmail());
-        helper.setSubject(MimeUtility.encodeText("Ваш аккаунт для проектной практики ПГНИУ был одобрен", ENCODING, "B"));
+        helper.setSubject(MimeUtility.encodeText("Ваш аккаунт для проектной практики ПГНИУ", ENCODING, "B"));
 
         Context context = new Context();
         context.setVariable("password", event.getPassword());
-        String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
+
+        String template = event.isFirstApprove() ? APPROVAL_TEMPLATE : PASSWORD_UPDATE_TEMPLATE;
+        String htmlContent = templateEngine.process(template, context);
 
         helper.setText(htmlContent, true);
         return message;

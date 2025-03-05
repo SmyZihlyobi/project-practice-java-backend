@@ -14,4 +14,5 @@ import java.io.Serializable;
 public class PasswordEvent implements Serializable {
     private String email;
     private String password;
+    private boolean isFirstApprove = false;
 }

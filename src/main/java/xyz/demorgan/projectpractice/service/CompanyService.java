@@ -90,9 +90,10 @@ public class CompanyService {
         companyRepository.save(company);
 
         PasswordEvent event = new PasswordEvent();
-
         event.setEmail(company.getEmail());
         event.setPassword(generatedPassword);
+        event.setFirstApprove(true);
+
 
         kafkaTemplate.send(KafkaConfig.COMPANY_TOPIC, event);
     }
