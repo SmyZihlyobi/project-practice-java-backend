@@ -5,16 +5,19 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import xyz.demorgan.projectpractice.config.KafkaConfig;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
 import xyz.demorgan.projectpractice.store.dto.LoginAnswer;
+import xyz.demorgan.projectpractice.store.dto.PasswordEvent;
 import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.dto.input.CompanyLoginDto;
 import xyz.demorgan.projectpractice.store.entity.Company;
@@ -39,6 +42,7 @@ public class CompanyService {
     final AuthenticationManager authenticationManager;
     final JwtTokenUtils jwtTokenUtils;
     final EmailService emailService;
+    final KafkaTemplate<String, PasswordEvent> kafkaTemplate;
 
     @Value("${company.default.email}")
     private String adminEmail;
@@ -86,7 +90,12 @@ public class CompanyService {
         company.setPassword(passwordEncoder.encode(generatedPassword));
         companyRepository.save(company);
 
-        emailService.sendEmail(generatedPassword); // ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
+        PasswordEvent event = new PasswordEvent();
+
+        event.setEmail(company.getEmail());
+        event.setPassword(generatedPassword);
+
+        kafkaTemplate.send(KafkaConfig.COMPANY_TOPIC, event);
     }
 
     public ResponseEntity<?> login(CompanyLoginDto companyLoginDto) {
@@ -127,7 +136,12 @@ public class CompanyService {
         company.setPassword(passwordEncoder.encode(generatedPassword));
         companyRepository.save(company);
 
-        emailService.sendEmail(generatedPassword); // TODO ЯДЕРНЫЙ ТЕСТОВЫЙ КОСТЫЛЬ СНЕСТИ ОТ ГРЕХА ПОДАЛЬШЕ
+        PasswordEvent event = new PasswordEvent();
+
+        event.setEmail(company.getEmail());
+        event.setPassword(generatedPassword);
+
+        kafkaTemplate.send(KafkaConfig.COMPANY_TOPIC, event);
     }
 
     public List<CompanyDto> findUnapprovedCompanies() {

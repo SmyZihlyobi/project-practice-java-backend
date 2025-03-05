@@ -30,6 +30,7 @@ services:
       - postgres
       - redis
       - minio
+      - kafka
 
   postgres:
     image: postgres:17.3
@@ -79,6 +80,36 @@ services:
       start_period: 10s
       retries: 5
 
+
+  kafka:
+    image: bitnami/kafka:3.9.0
+    restart: always
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+    volumes:
+      - kafka_data:/bitnami/kafka
+    environment:
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_KRAFT_CLUSTER_ID: NH4I7CHET2CN-TmAq27pLQ
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://0.0.0.0:9092,CONTROLLER://kafka:9093
+    healthcheck:
+      test: kafka-topics.sh --bootstrap-server localhost:9092 --list
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    labels:
+      amplicode.image: bitnami/kafka
+
 volumes:
   postgres_data:
   minio_data:
+  kafka_data:
