@@ -41,6 +41,11 @@ spring:
           auth: true
           starttls:
             enable: true
+            required: true
+          ssl:
+            trust: ${SMTP_SERVER}
+          debug: true
+
 
   kafka:
     bootstrap-servers: kafka:29092
