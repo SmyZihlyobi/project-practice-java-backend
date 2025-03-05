@@ -74,9 +74,8 @@ public class TeamService {
     }
 
     @Transactional
-    public Map<String, String> deleteAllTeams() {
+    public void deleteAllTeams() {
         log.info("Deleting all teams at {}", System.currentTimeMillis());
-        Map<String, String> response = new HashMap<>();
         String defaultTeamName = "Не выбрана";
 
         try {
@@ -99,13 +98,8 @@ public class TeamService {
                 }
                 teamRepository.delete(team);
             }
-
-            response.put("message", "Все команды успешно удалены, кроме команды по умолчанию.");
         } catch (Exception e) {
             log.error("Error deleting all teams: {}", e.getMessage());
-            response.put("message", "Ошибка при удалении команд: " + e.getMessage());
         }
-
-        return response;
     }
 }

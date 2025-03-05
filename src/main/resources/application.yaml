@@ -29,7 +29,46 @@ spring:
       port: ${REDIS_PORT:6379}
       host: ${REDIS_HOST:localhost}
 
+  mail:
+    host: ${SMTP_SERVER}
+    port: ${SMTP_PORT}
+    username: ${SMTP_LOGIN}
+    password: ${SMTP_PASSWORD}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: ${SMTP_SERVER}
+          debug: true
 
+
+  kafka:
+    bootstrap-servers: kafka:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 10
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      isolation-level: read_committed
+      properties:
+        spring.json.trusted.packages: "xyz.demorgan.projectpractice.store.dto"
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+
+smtp:
+  email: ${SMTP_EMAIL}
 
 server:
   port: 8080
@@ -58,6 +97,7 @@ company:
 
 logging:
   level:
+    org.springframework.mail: DEBUG
     root: info
   file:
     name: ./project-practice.log

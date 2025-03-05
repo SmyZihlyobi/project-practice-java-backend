@@ -18,7 +18,6 @@ import xyz.demorgan.projectpractice.store.repos.ProjectRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -76,9 +75,8 @@ public class ProjectService {
 
 
     @CacheEvict(value = "projects", allEntries = true)
-    public Map<String, String> deleteAllProjects() {
+    public void deleteAllProjects() {
         log.info("Deleting all projects at {}", System.currentTimeMillis());
         projectRepository.deleteAll();
-        return Map.of("message", "All projects deleted");
     }
 }

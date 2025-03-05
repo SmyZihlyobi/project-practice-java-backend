@@ -64,7 +64,7 @@ public class ProjectController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
-    public Map<String, String> deleteAllProjects() {
-        return projectService.deleteAllProjects();
+    public void deleteAllProjects() {
+        projectService.deleteAllProjects();
     }
 }
