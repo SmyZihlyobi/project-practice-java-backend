@@ -20,6 +20,11 @@ services:
       COMPANY_DEFAULT_PASSWORD: ${COMPANY_DEFAULT_PASSWORD}
       REDIS_HOST: ${REDIS_HOST}
       CLIENT_IP: ${CLIENT_IP}
+      SMTP_SERVER: ${SMTP_SERVER}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_LOGIN: ${SMTP_LOGIN}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_EMAIL: ${SMTP_EMAIL}
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
       interval: 30s

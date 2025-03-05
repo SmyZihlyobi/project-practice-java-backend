@@ -12,8 +12,6 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -37,8 +35,6 @@ public class EmailService {
     private String from;
 
     @KafkaListener(topics = "company-password-email", groupId = "company-password-email")
-    @Retryable(value = {MailException.class, MessagingException.class, KafkaException.class},
-            maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void sendEmail(PasswordEvent event, Acknowledgment acknowledgment) {
         if (!isValidEvent(event)) {
             log.error("Invalid PasswordEvent received: {}", event);
