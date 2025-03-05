@@ -42,7 +42,7 @@ spring:
             enable: true
 
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: kafka:29092
     producer:
       acks: all
       retries: 10
