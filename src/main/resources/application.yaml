@@ -101,3 +101,7 @@ logging:
     root: info
   file:
     name: ./project-practice.log
+
+recaptcha:
+  secret:
+    key: ${RECAPTCHA_SECRET_KEY}
