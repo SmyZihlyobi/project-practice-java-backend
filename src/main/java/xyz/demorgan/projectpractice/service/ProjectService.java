@@ -49,6 +49,7 @@ public class ProjectService {
 
     @CacheEvict(value = "projects", allEntries = true)
     public ProjectDto create(ProjectInputDto input, String jwtToken) {
+        // TODO отправка ид студ проекта на почту через кафку
         log.info("Creating project at {}", System.currentTimeMillis());
 
         String token = jwtToken.replace("Bearer ", "");
