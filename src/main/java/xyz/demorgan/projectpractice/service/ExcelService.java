@@ -1,10 +1,9 @@
 package xyz.demorgan.projectpractice.service;
 
-import org.apache.poi.common.usermodel.HyperlinkType;
-import org.springframework.beans.factory.annotation.Value;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.store.entity.Student;
 import xyz.demorgan.projectpractice.store.repos.StudentRepository;
@@ -161,26 +160,9 @@ public class ExcelService {
         createCell(row, colNum++, student.getTelegram(), style);
 
         // Резюме
-        if (student.getResumePdf() != null) {
-            String baseUrl = clientip.startsWith("http") ? clientip : "http://" + clientip;
-            String url = baseUrl + ":8080/api/v1/files/resume/" + student.getResumePdf();
-
-            CreationHelper createHelper = workbook.getCreationHelper();
+        if (!student.getResumePdf().isEmpty()) {
             Cell cell = row.createCell(colNum++);
             cell.setCellValue("прикреплено");
-
-            Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
-            hyperlink.setAddress(url);
-            cell.setHyperlink(hyperlink);
-
-            // Стиль для гиперссылки
-            CellStyle hyperlinkStyle = workbook.createCellStyle();
-            hyperlinkStyle.cloneStyleFrom(style);
-            Font font = workbook.createFont();
-            font.setUnderline(Font.U_SINGLE);
-            font.setColor(IndexedColors.BLUE.getIndex());
-            hyperlinkStyle.setFont(font);
-            cell.setCellStyle(hyperlinkStyle);
         } else {
             createCell(row, colNum++, "", style);
         }
