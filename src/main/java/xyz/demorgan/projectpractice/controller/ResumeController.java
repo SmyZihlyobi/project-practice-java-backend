@@ -50,6 +50,7 @@ public class ResumeController {
                 .body(new InputStreamResource(resume));
     }
 
+
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") TODO
     @Operation(summary = "Upload resume", description = "Upload resume for user")
     @SecurityRequirement(name = "bearerAuth")

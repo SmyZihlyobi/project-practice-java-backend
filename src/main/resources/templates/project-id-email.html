@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ID проекта</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background-color: #262626;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+            background-color: #f8f9fa;
+            min-height: 200px;
+        }
+
+        .highlight {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .project-id {
+            color: #16a085;
+            background-color: #e8f6f3;
+            border-color: #1abc9c;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Идентификатор проекта</h1>
+    </div>
+
+    <div class="content">
+        <p>Здравствуйте!</p>
+        <p>Ваш постоянный идентификатор проекта в системе:</p>
+
+        <div class="highlight project-id">
+            <div style="font-size: 14px; margin-bottom: 8px;">УНИКАЛЬНЫЙ ID</div>
+            <span th:text="${projectId}"></span>
+        </div>
+
+        <p>Используйте этот идентификатор для участия в проектной практике:</p>
+        <ul style="margin: 20px 0; color: #555;">
+            <li>Передайте этот ID членам вашей команды</li>
+            <li>При обращении к преподавателям</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Project Practice ИКНТ</p>
+        <p>Это письмо сформировано автоматически • Не отвечайте на него</p>
+    </div>
+</div>
+</body>
+</html>
