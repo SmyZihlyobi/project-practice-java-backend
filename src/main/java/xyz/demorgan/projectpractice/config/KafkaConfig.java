@@ -9,9 +9,15 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class KafkaConfig {
     public final static String COMPANY_TOPIC = "company-password-email";
+    public final static String PROJECT_ID_TOPIC = "student-project-id";
 
     @Bean
     public NewTopic companyTopic() {
         return new NewTopic(COMPANY_TOPIC, 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic projectTopic() {
+        return new NewTopic(PROJECT_ID_TOPIC, 1, (short) 1);
     }
 }

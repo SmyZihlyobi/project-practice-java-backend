@@ -19,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.demorgan.projectpractice.service.ResumeService;
-import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 import xyz.demorgan.projectpractice.store.dto.input.ResumeUploadRequest;
 
 import java.io.InputStream;
@@ -49,6 +48,7 @@ public class ResumeController {
                 .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
                 .body(new InputStreamResource(resume));
     }
+
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") TODO
     @Operation(summary = "Upload resume", description = "Upload resume for user")

@@ -5,10 +5,13 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import xyz.demorgan.projectpractice.config.KafkaConfig;
 import xyz.demorgan.projectpractice.config.jwt.JwtTokenUtils;
 import xyz.demorgan.projectpractice.exceptions.NotFound;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
+import xyz.demorgan.projectpractice.store.dto.StudentProjectCreationEvent;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 import xyz.demorgan.projectpractice.store.entity.Company;
 import xyz.demorgan.projectpractice.store.entity.Project;
@@ -31,6 +34,8 @@ public class ProjectService {
     JwtTokenUtils jwtTokenUtils;
     ProjectRepository projectRepository;
     CompanyRepository companyRepository;
+    KafkaTemplate<String, StudentProjectCreationEvent> kafkaTemplate;
+
 
     @Cacheable(value = "projects", key = "'all_projects'")
     public List<ProjectDto> getAll() {
@@ -62,7 +67,17 @@ public class ProjectService {
         project.setCreatedAt(LocalDateTime.now());
         project.setUpdatedAt(LocalDateTime.now());
 
-        return projectMapper.toProjectDto(projectRepository.save(project));
+        Project savedProject = projectRepository.save(project);
+
+        if (input.isStudentProject()) {
+            StudentProjectCreationEvent event = new StudentProjectCreationEvent(
+                    company.getEmail(),
+                    savedProject.getId()
+            );
+            kafkaTemplate.send(KafkaConfig.PROJECT_ID_TOPIC, event);
+        }
+
+        return projectMapper.toProjectDto(savedProject);
     }
 
     @CacheEvict(value = "projects", allEntries = true)

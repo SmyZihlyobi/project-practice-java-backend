@@ -36,7 +36,6 @@ public class TechnicalSpecificationsController {
     TechnicalSpecificationsService technicalSpecificationsService;
     Validator validator;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @Operation(summary = "Get technicalSpecifications", description = "Get technicalSpecifications by file name")
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/technicalSpecifications/{fileName}")
@@ -54,7 +53,6 @@ public class TechnicalSpecificationsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @Operation(summary = "Upload technicalSpecifications", description = "Upload technicalSpecifications for project")
     @PostMapping(value = "/technicalSpecifications", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-
     public ResponseEntity<?> uploadTechnicalSpecifications(@ModelAttribute @Valid FilesToProjectUploadDto FilesToProjectUploadDto) {
         Set<ConstraintViolation<FilesToProjectUploadDto>> violations = validator.validate(FilesToProjectUploadDto);
         if (!violations.isEmpty()) {
