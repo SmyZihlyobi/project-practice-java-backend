@@ -41,4 +41,4 @@ jobs:
 
       - name: Scan for vulnerabilities
         run: |
-          docker scan --severity high $DOCKER_HUB_USER/$MAIN_SERVICE:latest
+           docker scan --accept-license $DOCKER_HUB_USER/$MAIN_SERVICE:latest
