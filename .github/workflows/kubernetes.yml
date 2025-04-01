@@ -40,5 +40,7 @@ jobs:
           docker push $DOCKER_HUB_USER/$MAIN_SERVICE:latest
 
       - name: Scan for vulnerabilities
-        run: |
-           docker scan --accept-license $DOCKER_HUB_USER/$MAIN_SERVICE:latest
+        uses: crazy-max/ghaction-container-scan@v3
+        with:
+          image: $DOCKER_HUB_USER/$MAIN_SERVICE:latest
+          severity_threshold: HIGH
