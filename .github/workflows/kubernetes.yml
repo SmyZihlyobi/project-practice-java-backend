@@ -1,0 +1,44 @@
+name: Build and Push Backend Services
+on:
+  push:
+    branches: [ "kubernetes" ]
+  workflow_dispatch:
+
+jobs:
+  build-push-backend:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_HUB_USER: outr1ggr  # Your Docker Hub username
+      MAIN_SERVICE: project-practice
+      INFRA_IMAGES: postgres,redis,minio,kafka
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: Build main application
+        run: |
+          docker compose build $MAIN_SERVICE \
+            --progress plain \
+            --build-arg DOCKER_BUILDKIT=1
+
+      - name: Tag and push main service
+        run: |
+          docker login -u $DOCKER_HUB_USER -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker tag $MAIN_SERVICE:latest $DOCKER_HUB_USER/$MAIN_SERVICE:latest
+          docker push $DOCKER_HUB_USER/$MAIN_SERVICE:latest
+
+      - name: Scan for vulnerabilities
+        run: |
+          docker scan --severity high $DOCKER_HUB_USER/$MAIN_SERVICE:latest
