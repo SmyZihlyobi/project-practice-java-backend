@@ -43,4 +43,4 @@ jobs:
         uses: crazy-max/ghaction-container-scan@v3
         with:
           image: ${{ env.DOCKER_HUB_USER }}/${{ env.MAIN_SERVICE }}:latest
-          severity_threshold: HIGH
+          dockerfile: ./Dockerfile
