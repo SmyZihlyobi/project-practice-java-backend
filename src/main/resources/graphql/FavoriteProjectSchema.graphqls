@@ -1,0 +1,17 @@
+type FavoriteProject {
+    projectId: ID!
+}
+
+input FavoriteProjectInput {
+    studentId: ID!
+    projectId: ID!
+}
+
+extend type Query {
+    favoriteProjects(id: ID!): [FavoriteProject]
+}
+
+extend type Mutation {
+    addFavoriteProject(input: FavoriteProjectInput!): FavoriteProject
+    removeFavoriteProject(studentId: ID!, projectId: ID!): FavoriteProject
+}
