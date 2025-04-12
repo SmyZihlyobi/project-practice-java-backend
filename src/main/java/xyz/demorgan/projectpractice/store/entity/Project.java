@@ -21,6 +21,9 @@ public class Project implements Serializable {
     @Column(name = "id", nullable = false)
     Long id;
 
+    @Column(name = "is_active", columnDefinition = "boolean default true", nullable = false)
+    Boolean active = true;
+
     @Column(name = "name", nullable = false)
     String name;
 

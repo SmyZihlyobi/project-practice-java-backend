@@ -18,7 +18,6 @@ import xyz.demorgan.projectpractice.store.dto.ProjectDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -66,5 +65,20 @@ public class ProjectController {
     @MutationMapping
     public void deleteAllProjects() {
         projectService.deleteAllProjects();
+    }
+
+    @MutationMapping
+    public void archiveProject(@Argument("id") Long id) {
+        projectService.archiveProject(id);
+    }
+
+    @MutationMapping
+    public void unarchiveProject(@Argument("id") Long id) {
+        projectService.unarchiveProject(id);
+    }
+
+    @MutationMapping
+    public void archiveAllProjects() {
+        projectService.archiveAllProjects();
     }
 }

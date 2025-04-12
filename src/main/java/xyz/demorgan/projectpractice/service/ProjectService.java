@@ -40,7 +40,7 @@ public class ProjectService {
     @Cacheable(value = "projects", key = "'all_projects'")
     public List<ProjectDto> getAll() {
         log.info("Getting all projects at {}", System.currentTimeMillis());
-        return projectRepository.findAll()
+        return projectRepository.findAllSorted()
                 .stream()
                 .map(projectMapper::toProjectDto)
                 .collect(Collectors.toList());
@@ -93,5 +93,33 @@ public class ProjectService {
     public void deleteAllProjects() {
         log.info("Deleting all projects at {}", System.currentTimeMillis());
         projectRepository.deleteAll();
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public void archiveProject(Long id) {
+        log.info("Archiving project with id: {} at {}", id, System.currentTimeMillis());
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
+        project.setActive(false);
+        projectRepository.save(project);
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public void unarchiveProject(Long id) {
+        log.info("Unarchiving project with id: {} at {}", id, System.currentTimeMillis());
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
+        project.setActive(true);
+        projectRepository.save(project);
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public void archiveAllProjects() {
+        log.info("Archiving all projects at {}", System.currentTimeMillis());
+        List<Project> projects = projectRepository.findAll();
+        for (Project project : projects) {
+            project.setActive(false);
+        }
+        projectRepository.saveAll(projects);
     }
 }
