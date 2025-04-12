@@ -53,6 +53,27 @@ public class ProjectService {
     }
 
     @CacheEvict(value = "projects", allEntries = true)
+    public ProjectDto update(Long id, ProjectInputDto input, String jwtToken) {
+        log.info("Updating project with id: {} at {}", id, System.currentTimeMillis());
+
+        String token = jwtToken.replace("Bearer ", "");
+        Long companyId = Long.valueOf(jwtTokenUtils.getIdFromToken(token));
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
+
+        if (!project.getCompany().getId().equals(companyId)) {
+            throw new RuntimeException("You are not authorized to update this project");
+        }
+
+        projectMapper.updateProjectFromDto(input, project);
+        project.setUpdatedAt(LocalDateTime.now());
+
+        Project updatedProject = projectRepository.save(project);
+        return projectMapper.toProjectDto(updatedProject);
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
     public ProjectDto create(ProjectInputDto input, String jwtToken) {
         log.info("Creating project at {}", System.currentTimeMillis());
 
