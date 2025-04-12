@@ -6,7 +6,7 @@ type Project {
     teamsAmount: Int!
     technicalSpecifications: String
     presentation: String
-    isActive: Boolean
+    active: Boolean!
     studentProject: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -18,7 +18,7 @@ input ProjectInput {
     stack: String!
     teamsAmount: Int!
     technicalSpecifications: String
-    isActive: Boolean
+    active: Boolean
     presentation: String
     studentProject: Boolean!
 }

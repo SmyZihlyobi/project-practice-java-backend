@@ -22,7 +22,7 @@ public class Project implements Serializable {
     Long id;
 
     @Column(name = "is_active", columnDefinition = "boolean default true", nullable = false)
-    boolean active = true;
+    boolean active;
 
     @Column(name = "name", nullable = false)
     String name;
