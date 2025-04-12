@@ -55,6 +55,16 @@ public class ProjectController {
         return projectService.create(input, token);
     }
 
+    @PreAuthorize("hasRole('ROLE_COMPANY')")
+    @MutationMapping
+    public ProjectDto updateProject(@Argument("id") Long id, @Argument @Valid ProjectInputDto input) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            throw new RuntimeException("Authorization header is null");
+        }
+        return projectService.update(id, input, token);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public void deleteProject(@Argument("id") Long id) {

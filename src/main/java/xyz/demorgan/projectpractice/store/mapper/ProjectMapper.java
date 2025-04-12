@@ -1,8 +1,6 @@
 package xyz.demorgan.projectpractice.store.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 import xyz.demorgan.projectpractice.store.entity.Project;
@@ -14,4 +12,8 @@ public interface ProjectMapper {
     ProjectDto toProjectDto(Project project);
 
     Project toEntity(ProjectInputDto projectInputDto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    void updateProjectFromDto(ProjectInputDto projectInputDto, @MappingTarget Project project);
 }

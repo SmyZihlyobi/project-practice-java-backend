@@ -2,7 +2,6 @@ package xyz.demorgan.projectpractice.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,16 +18,10 @@ import java.time.LocalDateTime;
 public class ProjectDto {
     @NotNull
     private Long id;
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String name;
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String description;
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String stack;
     private boolean active;
