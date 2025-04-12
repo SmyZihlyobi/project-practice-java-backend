@@ -1,8 +1,6 @@
 package xyz.demorgan.projectpractice.store.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import xyz.demorgan.projectpractice.store.dto.ProjectDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 import xyz.demorgan.projectpractice.store.entity.Project;
@@ -14,4 +12,11 @@ public interface ProjectMapper {
     ProjectDto toProjectDto(Project project);
 
     Project toEntity(ProjectInputDto projectInputDto);
+
+    @AfterMapping
+    default void setDefaultValues(@MappingTarget Project project) {
+        if (project.getActive() == null) {
+            project.setActive(true);
+        }
+    }
 }
