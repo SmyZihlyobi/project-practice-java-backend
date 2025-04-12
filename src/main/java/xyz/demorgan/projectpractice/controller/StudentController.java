@@ -18,7 +18,6 @@ import xyz.demorgan.projectpractice.store.dto.StudentDto;
 import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -44,6 +43,7 @@ public class StudentController {
         studentService.getById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT')")
     @MutationMapping
     public StudentDto createStudent(@Argument("input") @Valid StudentInputDto studentInputDto) {
         Set<ConstraintViolation<StudentInputDto>> violations = validator.validate(studentInputDto);
