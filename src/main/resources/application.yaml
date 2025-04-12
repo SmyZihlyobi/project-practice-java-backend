@@ -99,12 +99,19 @@ company:
 logging:
   level:
     root: info
+    org.hibernate.SQL: warn
+    org.hibernate.type: debug
+    xyz.demorgan.projectpractice.security: debug
+    org.springframework.web: debug
+    org.apache.kafka: info
+    xyz.demorgan.projectpractice: info
+
   file:
     name: ./project-practice.log
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId:-}] [%thread] %-5level %logger{36} - %msg%n"
 
 recaptcha:
   secret:
