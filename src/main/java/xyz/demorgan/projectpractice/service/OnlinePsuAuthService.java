@@ -1,18 +1,19 @@
 package xyz.demorgan.projectpractice.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import xyz.demorgan.projectpractice.store.dto.ValidationResponse;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
-public class onlinePsuAuthService {
+public class OnlinePsuAuthService {
     static final RestTemplate restTemplate = new RestTemplate();
 
     public static boolean validateUser(String login, String password) {
@@ -29,17 +30,23 @@ public class onlinePsuAuthService {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         try {
-            ResponseEntity<ValidationResponse> response = restTemplate.postForEntity(
+            ResponseEntity<String> response = restTemplate.postForEntity(
                     url,
                     new HttpEntity<>(formData, headers),
-                    ValidationResponse.class
+                    String.class
             );
 
             log.info("Validation response: {}", response.getBody());
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                ValidationResponse body = response.getBody();
-                return body.getCode() == -1 && "".equals(body.getMsg());
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                var responseMap = objectMapper.readValue(response.getBody(), Map.class);
+
+                int code = (int) responseMap.get("code");
+                String msg = (String) responseMap.get("msg");
+
+                return code == -1 && "".equals(msg);
             }
         } catch (Exception e) {
             log.error("Error during external service validation: {}", e.getMessage());

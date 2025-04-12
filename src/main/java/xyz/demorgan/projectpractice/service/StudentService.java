@@ -78,7 +78,7 @@ public class StudentService {
     public String registerOrLoginStudent(String username, String password, boolean rememberMe) {
         log.info("Registering or logging in student with username: {} at {}", username, System.currentTimeMillis());
 
-        if (!onlinePsuAuthService.validateUser(username, password)) {
+        if (!OnlinePsuAuthService.validateUser(username, password)) {
             throw new IllegalArgumentException("Test.psu auth failed for username: " + username);
         }
 
