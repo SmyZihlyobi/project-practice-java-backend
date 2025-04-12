@@ -31,6 +31,7 @@ public class ProjectDto {
     @NotEmpty
     @NotBlank
     private String stack;
+    private boolean active;
     private int teamsAmount;
     private String technicalSpecifications;
     private String presentation;

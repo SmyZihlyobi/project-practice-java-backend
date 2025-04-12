@@ -16,9 +16,7 @@ import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 import xyz.demorgan.projectpractice.store.repos.TeamRepository;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -35,16 +33,12 @@ public class StudentService {
 
     public List<StudentDto> getAll() {
         log.info("Getting all students at {}", System.currentTimeMillis());
-        return studentRepository.findAll()
-                .stream()
-                .map(studentMapper::toStudentDto)
-                .collect(Collectors.toList());
+        return studentRepository.findAll().stream().map(studentMapper::toStudentDto).collect(Collectors.toList());
     }
 
     public void getById(Long id) {
         log.info("Getting student with id: {} at {}", id, System.currentTimeMillis());
-        studentMapper.toStudentDto(studentRepository.findById(id)
-                .orElseThrow(() -> new NotFound("Student with id " + id + " not found")));
+        studentMapper.toStudentDto(studentRepository.findById(id).orElseThrow(() -> new NotFound("Student with id " + id + " not found")));
     }
 
     @Transactional
@@ -80,8 +74,7 @@ public class StudentService {
     @Transactional
     public StudentDto deleteStudent(Long id) {
         log.info("Deleting student with id: {} at {}", id, System.currentTimeMillis());
-        Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new NotFound("Student with id " + id + " not found"));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new NotFound("Student with id " + id + " not found"));
         studentRepository.delete(student);
         return studentMapper.toStudentDto(student);
     }
@@ -102,11 +95,9 @@ public class StudentService {
         String token = jwtToken.replace("Bearer ", "");
         Long studentId = Long.valueOf(jwtTokenUtils.getIdFromToken(token));
 
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new NotFound("Student with id " + studentId + " not found"));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new NotFound("Student with id " + studentId + " not found"));
 
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new NotFound("Team with id " + teamId + " not found"));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new NotFound("Team with id " + teamId + " not found"));
 
         student.setTeam(team);
 

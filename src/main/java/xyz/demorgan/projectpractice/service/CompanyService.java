@@ -63,6 +63,9 @@ public class CompanyService {
 
     public Company create(CompanyInputDto companyInputDto) {
         log.info("Creating company at {}", System.currentTimeMillis());
+        if (companyRepository.findByEmail(companyInputDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         Company company = companyMapper.toEntity(companyInputDto);
         company.setCreatedAt(LocalDateTime.now());
         return companyRepository.save(company);

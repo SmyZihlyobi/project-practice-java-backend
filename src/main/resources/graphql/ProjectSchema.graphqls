@@ -6,6 +6,7 @@ type Project {
     teamsAmount: Int!
     technicalSpecifications: String
     presentation: String
+    isActive: Boolean
     studentProject: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -17,6 +18,7 @@ input ProjectInput {
     stack: String!
     teamsAmount: Int!
     technicalSpecifications: String
+    isActive: Boolean
     presentation: String
     studentProject: Boolean!
 }
@@ -30,4 +32,7 @@ extend type Mutation {
     createProject(input: ProjectInput!): Project
     deleteProject(id: ID!): Project
     deleteAllProjects: Boolean
+    archiveProject(id: ID!): Boolean
+    unarchiveProject(id: ID!): Boolean
+    archiveAllProjects: Boolean
 }

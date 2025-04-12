@@ -26,7 +26,7 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
         if (ex instanceof NotFound) {
             log.error("Not found exception: {} at {}", ex.getMessage(), LocalDateTime.now());
             return GraphqlErrorBuilder.newError(env)
-                    .message(ex.getMessage() + " time: " +  LocalDateTime.now())
+                    .message(ex.getMessage() + " time: " + LocalDateTime.now())
                     .errorType(ErrorType.NOT_FOUND)
                     .build();
         }
@@ -34,11 +34,10 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
         if (ex instanceof IllegalArgumentException) {
             log.error("Illegal argument exception: {} at {}", ex.getMessage(), LocalDateTime.now());
             return GraphqlErrorBuilder.newError(env)
-                    .message(ex.getMessage() + " time: " +  LocalDateTime.now())
+                    .message(ex.getMessage())
                     .errorType(ErrorType.BAD_REQUEST)
                     .build();
-        }
-        else if (ex instanceof ConstraintViolationException violationEx) {
+        } else if (ex instanceof ConstraintViolationException violationEx) {
             return GraphqlErrorBuilder.newError()
                     .message("Validation error")
                     .errorType(ErrorType.BAD_REQUEST)
@@ -48,8 +47,7 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
                                     ConstraintViolation::getMessage
                             )))
                     .build();
-        }
-        else if (ex instanceof WebExchangeBindException bindEx) {
+        } else if (ex instanceof WebExchangeBindException bindEx) {
             return handleBindException(bindEx, env);
         }
 
