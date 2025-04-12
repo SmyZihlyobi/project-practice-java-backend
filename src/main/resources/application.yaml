@@ -105,3 +105,12 @@ logging:
 recaptcha:
   secret:
     key: ${RECAPTCHA_SECRET_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
