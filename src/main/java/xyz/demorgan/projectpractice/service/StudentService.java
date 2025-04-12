@@ -44,6 +44,9 @@ public class StudentService {
     @Transactional
     public StudentDto addStudent(StudentInputDto studentInputDto) {
         log.info("Adding student at {}", System.currentTimeMillis());
+
+        Student studentUsername = studentRepository.findByUsername(studentInputDto.getUsername());
+
         Student student = studentMapper.toEntity(studentInputDto);
 
         Team team;
@@ -64,10 +67,30 @@ public class StudentService {
             }
         }
 
+        student.setId(studentUsername.getId());
+        student.setUsername(studentUsername.getUsername());
         student.setTeam(team);
-        student.setCreatedAt(LocalDateTime.now());
         student = studentRepository.save(student);
         return studentMapper.toStudentDto(student);
+    }
+
+    @Transactional
+    public String registerOrLoginStudent(String username, String password, boolean rememberMe) {
+        log.info("Registering or logging in student with username: {} at {}", username, System.currentTimeMillis());
+
+        if (!onlinePsuAuthService.validateUser(username, password)) {
+            throw new IllegalArgumentException("Test.psu auth failed for username: " + username);
+        }
+
+        Student student = studentRepository.findByUsername(username);
+        if (student == null) {
+            student = new Student();
+            student.setUsername(username);
+            student.setCreatedAt(LocalDateTime.now());
+            student = studentRepository.save(student);
+        }
+
+        return jwtTokenUtils.generateStudentToken(student, rememberMe);
     }
 
 

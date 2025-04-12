@@ -1,5 +1,6 @@
 type Student {
     id: ID!
+    username: String!
     teamName: String
     groupId: String!
     year: Int!
@@ -18,6 +19,7 @@ type Student {
 
 input StudentInput {
     teamName: String
+    username: String!
     groupId: String!
     year: Int!
     lastName: String!

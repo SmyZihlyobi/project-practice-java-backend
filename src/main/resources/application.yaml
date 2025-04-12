@@ -87,9 +87,6 @@ springdoc:
     enabled: true
     path: /v3/api-docs
 
-client:
-  ip: ${CLIENT_IP:http://62.233.43.154}
-
 company:
   default:
     email: ${COMPANY_DEFAULT_EMAIL:demo@docker.ru}
