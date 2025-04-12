@@ -67,16 +67,19 @@ public class ProjectController {
         projectService.deleteAllProjects();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @MutationMapping
     public void archiveProject(@Argument("id") Long id) {
         projectService.archiveProject(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @MutationMapping
     public void unarchiveProject(@Argument("id") Long id) {
         projectService.unarchiveProject(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @MutationMapping
     public void archiveAllProjects() {
         projectService.archiveAllProjects();

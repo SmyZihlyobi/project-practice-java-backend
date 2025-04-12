@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class StudentDto {
     private Long id;
+    private String username;
     private String teamName;
     private String groupId;
     private int year;

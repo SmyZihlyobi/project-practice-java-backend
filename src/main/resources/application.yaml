@@ -87,9 +87,6 @@ springdoc:
     enabled: true
     path: /v3/api-docs
 
-client:
-  ip: ${CLIENT_IP:http://62.233.43.154}
-
 company:
   default:
     email: ${COMPANY_DEFAULT_EMAIL:demo@docker.ru}
@@ -97,11 +94,23 @@ company:
 
 logging:
   level:
-    org.springframework.mail: DEBUG
     root: info
   file:
     name: ./project-practice.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
 
 recaptcha:
   secret:
     key: ${RECAPTCHA_SECRET_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

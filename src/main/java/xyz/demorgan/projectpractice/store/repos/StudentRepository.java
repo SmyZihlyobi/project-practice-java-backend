@@ -25,4 +25,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Transactional
     @Query("UPDATE Student s SET s.resumePdf = null")
     void updateResumePdfToNull();
+
+    Student findByUsername(String username);
 }
