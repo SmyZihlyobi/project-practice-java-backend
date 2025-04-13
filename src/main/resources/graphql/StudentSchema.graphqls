@@ -19,7 +19,6 @@ type Student {
 
 input StudentInput {
     teamName: String
-    username: String!
     groupId: String!
     year: Int!
     lastName: String!
