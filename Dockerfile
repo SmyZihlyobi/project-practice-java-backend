@@ -10,10 +10,7 @@ RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM eclipse-temurin:23.0.2_7-jre-alpine-3.21
 VOLUME /tmp
-RUN addgroup -S spring-user
-RUN adduser -S -G spring-user -h /home/spring-user spring-user
-RUN mkdir -p /home/spring-user/logs && chown spring-user:spring-user /home/spring-user/logs
-
+RUN adduser -S spring-user
 USER spring-user
 COPY --from=layers /application/dependencies/ ./
 COPY --from=layers /application/spring-boot-loader/ ./
