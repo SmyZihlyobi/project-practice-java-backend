@@ -9,6 +9,7 @@ import xyz.demorgan.projectpractice.store.entity.Project;
 public interface ProjectMapper {
     Project toEntity(ProjectDto projectDto);
 
+    @Mapping(target = "companyName", source = "company.name")
     ProjectDto toProjectDto(Project project);
 
     Project toEntity(ProjectInputDto projectInputDto);
