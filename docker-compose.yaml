@@ -35,7 +35,7 @@ services:
       start_period: 30s
       retries: 5
     volumes:
-      - logs:/logs
+      - logs:/var/log/project-practice/
     depends_on:
       - postgres
       - redis
