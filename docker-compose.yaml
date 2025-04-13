@@ -34,8 +34,6 @@ services:
       timeout: 5s
       start_period: 30s
       retries: 5
-    volumes:
-      - ./logs:/home/spring-user/logs
     depends_on:
       - postgres
       - redis
@@ -123,4 +121,3 @@ volumes:
   postgres_data:
   minio_data:
   kafka_data:
-  logs:
