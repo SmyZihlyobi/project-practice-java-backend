@@ -12,7 +12,8 @@ FROM eclipse-temurin:23.0.2_7-jre-alpine-3.21
 VOLUME /tmp
 RUN addgroup -S spring-user && \
     adduser -S spring-user -G spring-user && \
-    mkdir -p /home/spring-user/{logs,tmp} && \
+    mkdir -p /home/spring-user/logs && \
+    mkdir -p /home/spring-user/tmp && \
     chown -R spring-user:spring-user /home/spring-user && \
     chmod -R 775 /home/spring-user && \
     touch /home/spring-user/logs/project-practice.log && \
@@ -20,6 +21,7 @@ RUN addgroup -S spring-user && \
 
 ENV CATALINA_TMPDIR=/home/spring-user/tmp
 ENV JAVA_OPTS="-Djava.io.tmpdir=/home/spring-user/tmp"
+
 USER spring-user
 COPY --from=layers /application/dependencies/ ./
 COPY --from=layers /application/spring-boot-loader/ ./
