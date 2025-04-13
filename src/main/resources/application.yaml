@@ -121,7 +121,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: project-practice
+  prometheus:
+    metrics:
+      export:
+        enabled: true
