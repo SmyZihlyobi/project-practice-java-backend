@@ -10,6 +10,7 @@ type Project {
     studentProject: Boolean!
     createdAt: String!
     updatedAt: String!
+    companyName: String
 }
 
 input ProjectInput {
