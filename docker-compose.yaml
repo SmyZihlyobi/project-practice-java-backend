@@ -34,6 +34,8 @@ services:
       timeout: 5s
       start_period: 30s
       retries: 5
+    volumes:
+      - logs:/logs
     depends_on:
       - postgres
       - redis
@@ -121,3 +123,4 @@ volumes:
   postgres_data:
   minio_data:
   kafka_data:
+  logs:
