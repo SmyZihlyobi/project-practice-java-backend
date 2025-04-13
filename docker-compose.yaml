@@ -35,7 +35,7 @@ services:
       start_period: 30s
       retries: 5
     volumes:
-      - logs:/var/log/project-practice/
+      - logs:/home/spring-user/logs
     depends_on:
       - postgres
       - redis
