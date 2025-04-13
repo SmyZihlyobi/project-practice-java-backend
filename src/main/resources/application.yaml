@@ -107,7 +107,7 @@ logging:
     xyz.demorgan.projectpractice: info
 
   file:
-    name: /home/spring-user/logs/project-practice.log
+    name: ./project-practice.log
 
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
