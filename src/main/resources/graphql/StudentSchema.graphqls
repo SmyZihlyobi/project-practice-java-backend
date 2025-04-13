@@ -1,6 +1,6 @@
 type Student {
     id: ID!
-    username: String!
+    username: String
     teamName: String
     groupId: String!
     year: Int!
