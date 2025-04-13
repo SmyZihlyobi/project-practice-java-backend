@@ -21,6 +21,7 @@ public class JwtTokenUtils {
     public String generateStudentToken(Student student, boolean rememberMe) {
         Map<String, Object> claims = new HashMap<>();
 
+        claims.put("id", student.getId());
         claims.put("roles", student.getRoles());
         claims.put("username", student.getUsername());
 
