@@ -30,13 +30,13 @@ public class FavoriteProjectController {
         return favoriteProjectService.getFavoriteProjects(id);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT')")
     @MutationMapping
     public FavoriteProjectDto addFavoriteProject(@Argument FavoriteProjectInput input) {
         return favoriteProjectService.addFavoriteProject(input);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT')")
     @MutationMapping
     public FavoriteProjectDto removeFavoriteProject(@Argument Long studentId, @Argument Long projectId) {
         return favoriteProjectService.removeFavoriteProject(studentId, projectId);
