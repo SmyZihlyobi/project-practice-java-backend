@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class StudentInputDto {
+    @NotBlank(message = "Логин не может быть пустым")
     private String username;
     private String teamName;
     @NotBlank(message = "ID группы не может быть пустым")
