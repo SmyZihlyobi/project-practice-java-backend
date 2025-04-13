@@ -13,7 +13,8 @@ VOLUME /tmp
 RUN adduser -S spring-user
 USER spring-user
 RUN mkdir -p /home/spring-user/logs && \
-    chown spring-user /home/spring-user/logs
+    chown spring-user:spring-user /home/spring-user/logs && \
+    chmod 775 /home/spring-user/logs
 USER spring-user
 COPY --from=layers /application/dependencies/ ./
 COPY --from=layers /application/spring-boot-loader/ ./
