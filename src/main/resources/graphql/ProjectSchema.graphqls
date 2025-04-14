@@ -19,7 +19,6 @@ input ProjectInput {
     stack: String!
     teamsAmount: Int!
     technicalSpecifications: String
-    active: Boolean
     presentation: String
     studentProject: Boolean!
 }
