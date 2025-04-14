@@ -84,6 +84,7 @@ public class ProjectService {
                 .orElseThrow(() -> new NotFound("Company with id " + companyId + " not found"));
 
         Project project = projectMapper.toEntity(input);
+        project.setActive(true);
         project.setCompany(company);
         project.setCreatedAt(LocalDateTime.now());
         project.setUpdatedAt(LocalDateTime.now());
