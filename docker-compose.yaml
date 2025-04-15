@@ -34,6 +34,10 @@ services:
       timeout: 5s
       start_period: 30s
       retries: 5
+    logging:
+      driver: json-file
+      options:
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
     depends_on:
       - postgres
       - redis
