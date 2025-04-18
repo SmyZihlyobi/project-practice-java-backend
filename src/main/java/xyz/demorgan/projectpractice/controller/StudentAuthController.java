@@ -26,7 +26,7 @@ public class StudentAuthController {
 
     @PostMapping("/student/register")
     public ResponseEntity<LoginAnswer> register(@Valid @RequestBody StudentRegistrationInput student) {
-        log.info("Registering student: {}", student);
+        log.info("Registering student with username: {}", student.getUsername());
         String jwtToken = studentService.registerOrLoginStudent(
                 student.getUsername(),
                 student.getPassword(),
