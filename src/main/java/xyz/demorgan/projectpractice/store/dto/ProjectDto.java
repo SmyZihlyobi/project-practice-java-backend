@@ -27,6 +27,7 @@ public class ProjectDto {
     private boolean active;
     private int teamsAmount;
     private String direction;
+    private String requiredRoles;
     private String technicalSpecifications;
     private String presentation;
     private boolean studentProject;

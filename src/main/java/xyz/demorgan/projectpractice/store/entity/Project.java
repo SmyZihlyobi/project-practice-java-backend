@@ -48,6 +48,9 @@ public class Project implements Serializable {
     @Column(name = "direction")
     String direction;
 
+    @Column(name = "required_roles")
+    String requiredRoles;
+
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 

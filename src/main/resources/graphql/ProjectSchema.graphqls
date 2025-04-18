@@ -6,6 +6,7 @@ type Project {
     teamsAmount: Int!
     technicalSpecifications: String
     direction: String
+    requiredRoles : String
     presentation: String
     active: Boolean!
     studentProject: Boolean!
@@ -19,6 +20,7 @@ input ProjectInput {
     description: String!
     stack: String!
     direction: String
+    requiredRoles : String
     teamsAmount: Int!
     technicalSpecifications: String
     presentation: String
