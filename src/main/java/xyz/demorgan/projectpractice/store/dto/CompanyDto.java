@@ -30,5 +30,6 @@ public class CompanyDto {
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
     private LocalDateTime createdAt;
+    private String website;
     private List<ProjectDto> projects;
 }
