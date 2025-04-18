@@ -20,6 +20,7 @@ public class ProjectInputDto {
     int teamsAmount;
     @NotBlank(message = "Стек технологий не может быть пустым")
     String stack;
+    String direction;
     String technicalSpecifications;
     Long presentation;
     boolean studentProject;

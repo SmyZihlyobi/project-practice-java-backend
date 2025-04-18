@@ -45,6 +45,9 @@ public class Project implements Serializable {
     @Column(name = "is_student_project", columnDefinition = "boolean default false", nullable = false)
     boolean studentProject;
 
+    @Column(name = "direction")
+    String direction;
+
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 
