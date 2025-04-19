@@ -95,6 +95,10 @@ public class StudentService {
             student = studentRepository.save(student);
         }
 
+        if (student.getCreatedAt() == null) {
+            student.setCreatedAt(LocalDateTime.now());
+        }
+
         return jwtTokenUtils.generateStudentToken(student, rememberMe);
     }
 
