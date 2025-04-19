@@ -70,6 +70,11 @@ public class StudentService {
         student.setId(studentUsername.getId());
         student.setUsername(studentUsername.getUsername());
         student.setTeam(team);
+
+        if (student.getCreatedAt() == null) {
+            student.setCreatedAt(LocalDateTime.now());
+        }
+
         student = studentRepository.save(student);
         return studentMapper.toStudentDto(student);
     }
