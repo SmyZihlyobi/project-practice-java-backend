@@ -22,6 +22,7 @@ public class StudentExportDto {
     private int secondPriority;
     private int thirdPriority;
     private String otherPriorities;
+    private String desiredRole;
     private String telegram;
     private String resumePdf;
     private String resumeLink;

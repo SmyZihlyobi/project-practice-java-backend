@@ -3,20 +3,17 @@ package xyz.demorgan.projectpractice.service;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import xyz.demorgan.projectpractice.store.entity.Student;
 import xyz.demorgan.projectpractice.store.repos.StudentRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ExcelService {
 
     StudentRepository studentRepository;
-
-    @Value("${client.ip}")
-    private String clientip;
 
     public ExcelService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -59,9 +56,9 @@ public class ExcelService {
         for (Student student : students) {
             Row row = sheet.createRow(rowNum++);
 
-            if (student.getTeamName().equals("Не выбрана") || !student.getTeamName().equals(previousTeam)) {
+            if ("Не выбрана".equals(student.getTeamName()) || !Objects.equals(student.getTeamName(), previousTeam)) {
                 styleIndex = (styleIndex + 1) % 2;
-                previousTeam = student.getTeamName();
+                previousTeam = student.getTeamName() != null ? student.getTeamName() : "Не выбрана";
             }
 
             fillStudentRow(student, row, rowStyles[styleIndex], workbook);

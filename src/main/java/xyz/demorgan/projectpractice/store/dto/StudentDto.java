@@ -25,6 +25,7 @@ public class StudentDto {
     private int firstPriority;
     private int secondPriority;
     private int thirdPriority;
+    private String desiredRole;
     private String otherPriorities;
     private String telegram;
     private String resumePdf;

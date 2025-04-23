@@ -31,6 +31,7 @@ public class StudentInputDto {
     private String otherPriorities;
     @NotBlank(message = "Telegram не может быть пустым")
     private String telegram;
+    private String desiredRole;
     private String resumePdf;
     private String resumeLink;
 }

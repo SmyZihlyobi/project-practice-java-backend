@@ -70,6 +70,11 @@ public class StudentService {
         student.setId(studentUsername.getId());
         student.setUsername(studentUsername.getUsername());
         student.setTeam(team);
+
+        if (student.getCreatedAt() == null) {
+            student.setCreatedAt(LocalDateTime.now());
+        }
+
         student = studentRepository.save(student);
         return studentMapper.toStudentDto(student);
     }
@@ -88,6 +93,10 @@ public class StudentService {
             student.setUsername(username);
             student.setCreatedAt(LocalDateTime.now());
             student = studentRepository.save(student);
+        }
+
+        if (student.getCreatedAt() == null) {
+            student.setCreatedAt(LocalDateTime.now());
         }
 
         return jwtTokenUtils.generateStudentToken(student, rememberMe);

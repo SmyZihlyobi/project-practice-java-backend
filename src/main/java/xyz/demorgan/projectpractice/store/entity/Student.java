@@ -43,6 +43,9 @@ public class Student implements Serializable {
     @Column(name = "patronymic")
     String patronymic;
 
+    @Column(name = "desired_role")
+    String desiredRole;
+
     @Column(name = "first_priority")
     Integer firstPriority;
 
