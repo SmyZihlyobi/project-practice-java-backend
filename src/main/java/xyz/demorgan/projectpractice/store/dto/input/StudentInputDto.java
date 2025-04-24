@@ -8,6 +8,8 @@ import lombok.Data;
 
 @Data
 public class StudentInputDto {
+    @NotBlank(message = "Логин не может быть пустым")
+    private String username;
     private String teamName;
     @NotBlank(message = "ID группы не может быть пустым")
     private String groupId;
@@ -29,6 +31,7 @@ public class StudentInputDto {
     private String otherPriorities;
     @NotBlank(message = "Telegram не может быть пустым")
     private String telegram;
+    private String desiredRole;
     private String resumePdf;
     private String resumeLink;
 }

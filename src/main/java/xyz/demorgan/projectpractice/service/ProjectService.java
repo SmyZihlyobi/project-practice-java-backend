@@ -40,7 +40,7 @@ public class ProjectService {
     @Cacheable(value = "projects", key = "'all_projects'")
     public List<ProjectDto> getAll() {
         log.info("Getting all projects at {}", System.currentTimeMillis());
-        return projectRepository.findAll()
+        return projectRepository.findAllSorted()
                 .stream()
                 .map(projectMapper::toProjectDto)
                 .collect(Collectors.toList());
@@ -50,6 +50,27 @@ public class ProjectService {
         log.info("Getting project with id: {} at {}", id, System.currentTimeMillis());
         return projectMapper.toProjectDto(projectRepository.findById(id)
                 .orElseThrow(() -> new NotFound("Project with id " + id + " not found")));
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public ProjectDto update(Long id, ProjectInputDto input, String jwtToken) {
+        log.info("Updating project with id: {} at {}", id, System.currentTimeMillis());
+
+        String token = jwtToken.replace("Bearer ", "");
+        Long companyId = Long.valueOf(jwtTokenUtils.getIdFromToken(token));
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
+
+        if (!project.getCompany().getId().equals(companyId)) {
+            throw new RuntimeException("You are not authorized to update this project");
+        }
+
+        projectMapper.updateProjectFromDto(input, project);
+        project.setUpdatedAt(LocalDateTime.now());
+
+        Project updatedProject = projectRepository.save(project);
+        return projectMapper.toProjectDto(updatedProject);
     }
 
     @CacheEvict(value = "projects", allEntries = true)
@@ -63,6 +84,7 @@ public class ProjectService {
                 .orElseThrow(() -> new NotFound("Company with id " + companyId + " not found"));
 
         Project project = projectMapper.toEntity(input);
+        project.setActive(true);
         project.setCompany(company);
         project.setCreatedAt(LocalDateTime.now());
         project.setUpdatedAt(LocalDateTime.now());
@@ -93,5 +115,33 @@ public class ProjectService {
     public void deleteAllProjects() {
         log.info("Deleting all projects at {}", System.currentTimeMillis());
         projectRepository.deleteAll();
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public void archiveProject(Long id) {
+        log.info("Archiving project with id: {} at {}", id, System.currentTimeMillis());
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
+        project.setActive(false);
+        projectRepository.save(project);
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public void unarchiveProject(Long id) {
+        log.info("Unarchiving project with id: {} at {}", id, System.currentTimeMillis());
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new NotFound("Project with id " + id + " not found"));
+        project.setActive(true);
+        projectRepository.save(project);
+    }
+
+    @CacheEvict(value = "projects", allEntries = true)
+    public void archiveAllProjects() {
+        log.info("Archiving all projects at {}", System.currentTimeMillis());
+        List<Project> projects = projectRepository.findAll();
+        for (Project project : projects) {
+            project.setActive(false);
+        }
+        projectRepository.saveAll(projects);
     }
 }

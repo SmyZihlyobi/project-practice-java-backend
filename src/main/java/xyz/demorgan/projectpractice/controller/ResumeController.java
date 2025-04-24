@@ -50,7 +50,7 @@ public class ResumeController {
     }
 
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") TODO
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
     @Operation(summary = "Upload resume", description = "Upload resume for user")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
 import xyz.demorgan.projectpractice.exceptions.JwtValidationException;
 import xyz.demorgan.projectpractice.store.entity.Company;
+import xyz.demorgan.projectpractice.store.entity.Student;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
@@ -16,6 +17,31 @@ public class JwtTokenUtils {
 
     private final Duration lifetime = Duration.ofDays(30);
     private final SecretKey secretKey = Jwts.SIG.HS256.key().build();
+
+    public String generateStudentToken(Student student, boolean rememberMe) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("id", student.getId());
+        claims.put("roles", student.getRoles());
+        claims.put("username", student.getUsername());
+
+        Date issuedAt = new Date();
+        Date expiration;
+        if (rememberMe) {
+            expiration = new Date(issuedAt.getTime() + lifetime.toMillis());
+        } else {
+            expiration = new Date(issuedAt.getTime() + Duration.ofMinutes(15L).toMillis());
+        }
+
+        return Jwts.builder()
+                .subject(student.getUsername())
+                .issuer("project-practice")
+                .claims(claims)
+                .issuedAt(issuedAt)
+                .expiration(expiration)
+                .signWith(secretKey)
+                .compact();
+    }
 
     public String generateCompanyToken(Company company) {
         Map<String, Object> claims = new HashMap<>();

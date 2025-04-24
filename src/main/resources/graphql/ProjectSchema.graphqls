@@ -5,16 +5,22 @@ type Project {
     stack: String!
     teamsAmount: Int!
     technicalSpecifications: String
+    direction: String
+    requiredRoles : String
     presentation: String
+    active: Boolean!
     studentProject: Boolean!
     createdAt: String!
     updatedAt: String!
+    companyName: String
 }
 
 input ProjectInput {
     name: String!
     description: String!
     stack: String!
+    direction: String
+    requiredRoles : String
     teamsAmount: Int!
     technicalSpecifications: String
     presentation: String
@@ -28,6 +34,10 @@ extend type Query {
 
 extend type Mutation {
     createProject(input: ProjectInput!): Project
+    updateProject(id: ID!, input: ProjectInput!): Project!
     deleteProject(id: ID!): Project
     deleteAllProjects: Boolean
+    archiveProject(id: ID!): Boolean
+    unarchiveProject(id: ID!): Boolean
+    archiveAllProjects: Boolean
 }

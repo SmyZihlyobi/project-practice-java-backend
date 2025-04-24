@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class StudentDto {
     private Long id;
+    private String username;
     private String teamName;
     private String groupId;
     private int year;
@@ -24,6 +25,7 @@ public class StudentDto {
     private int firstPriority;
     private int secondPriority;
     private int thirdPriority;
+    private String desiredRole;
     private String otherPriorities;
     private String telegram;
     private String resumePdf;

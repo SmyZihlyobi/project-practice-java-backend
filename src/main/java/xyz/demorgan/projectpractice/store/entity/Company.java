@@ -38,6 +38,9 @@ public class Company implements Serializable {
     @Column(name = "password")
     String password;
 
+    @Column(name = "website")
+    String website;
+
     @Column(name = "student_company", columnDefinition = "boolean default false", nullable = false)
     boolean studentCompany;
 
@@ -50,5 +53,6 @@ public class Company implements Serializable {
     List<String> roles = new ArrayList<>(Collections.singletonList("ROLE_COMPANY"));
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Project> projects = new ArrayList<>();;
+    List<Project> projects = new ArrayList<>();
+    ;
 }

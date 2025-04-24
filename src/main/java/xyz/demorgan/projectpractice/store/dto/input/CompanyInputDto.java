@@ -22,5 +22,6 @@ public class CompanyInputDto {
     @Email(message = "Некорректный email")
     @NotBlank(message = "Email не может быть пустым")
     private String email;
+    private String website;
     private boolean studentCompany;
 }

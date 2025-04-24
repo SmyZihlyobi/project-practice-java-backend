@@ -2,7 +2,6 @@ package xyz.demorgan.projectpractice.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,19 +18,16 @@ import java.time.LocalDateTime;
 public class ProjectDto {
     @NotNull
     private Long id;
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String name;
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String description;
-    @NotNull
-    @NotEmpty
     @NotBlank
     private String stack;
+    private boolean active;
     private int teamsAmount;
+    private String direction;
+    private String requiredRoles;
     private String technicalSpecifications;
     private String presentation;
     private boolean studentProject;
@@ -39,4 +35,6 @@ public class ProjectDto {
     private LocalDateTime createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
     private LocalDateTime updatedAt;
+
+    private String companyName;
 }

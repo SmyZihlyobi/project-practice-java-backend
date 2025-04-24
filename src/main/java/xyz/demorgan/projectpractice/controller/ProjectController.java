@@ -18,7 +18,6 @@ import xyz.demorgan.projectpractice.store.dto.ProjectDto;
 import xyz.demorgan.projectpractice.store.dto.input.ProjectInputDto;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -56,6 +55,16 @@ public class ProjectController {
         return projectService.create(input, token);
     }
 
+    @PreAuthorize("hasRole('ROLE_COMPANY')")
+    @MutationMapping
+    public ProjectDto updateProject(@Argument("id") Long id, @Argument @Valid ProjectInputDto input) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            throw new RuntimeException("Authorization header is null");
+        }
+        return projectService.update(id, input, token);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public void deleteProject(@Argument("id") Long id) {
@@ -66,5 +75,23 @@ public class ProjectController {
     @MutationMapping
     public void deleteAllProjects() {
         projectService.deleteAllProjects();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
+    @MutationMapping
+    public void archiveProject(@Argument("id") Long id) {
+        projectService.archiveProject(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
+    @MutationMapping
+    public void unarchiveProject(@Argument("id") Long id) {
+        projectService.unarchiveProject(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
+    @MutationMapping
+    public void archiveAllProjects() {
+        projectService.archiveAllProjects();
     }
 }

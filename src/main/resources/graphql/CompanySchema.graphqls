@@ -5,12 +5,14 @@ type Company {
     contacts: String!
     studentCompany: Boolean!
     createdAt: String!
+    website: String
     projects: [Project!]!
 }
 
 input CompanyInput {
     name: String!
     representative: String!
+    website: String
     email: String!
     contacts: String!
     studentCompany: Boolean!

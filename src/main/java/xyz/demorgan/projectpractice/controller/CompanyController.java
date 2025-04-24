@@ -18,7 +18,6 @@ import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.mapper.CompanyMapper;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -41,7 +40,8 @@ public class CompanyController {
     public CompanyDto company(@Argument Long id) {
         return companyService.getById(id);
     }
-    // TODO - Секьюрность
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @QueryMapping
     public List<CompanyDto> unapprovedCompanies() {
         return companyService.findUnapprovedCompanies();

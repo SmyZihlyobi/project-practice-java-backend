@@ -26,12 +26,18 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_EMAIL: ${SMTP_EMAIL}
       RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
+      POSTGRES_MAX_CONNECTIONS: "200"
+      POSTGRES_IDLE_IN_TRANSACTION_SESSION_TIMEOUT: "30000"
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
       interval: 30s
       timeout: 5s
       start_period: 30s
       retries: 5
+    logging:
+      driver: json-file
+      options:
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
     depends_on:
       - postgres
       - redis
