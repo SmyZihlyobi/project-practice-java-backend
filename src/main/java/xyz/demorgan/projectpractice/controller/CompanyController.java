@@ -56,6 +56,14 @@ public class CompanyController {
         return companyMapper.toCompanyDto(companyService.create(companyInputDto));
     }
 
+    @PreAuthorize("hasRole('ROLE_COMPANY')")
+    @MutationMapping
+    public CompanyDto updateCompany(@Argument("id") Long companyId,
+                                    @Argument("input") @Valid CompanyInputDto companyInputDto
+    ) {
+        return companyService.updateCompany(companyId, companyInputDto);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public CompanyDto deleteCompany(@Argument("id") Long id) {

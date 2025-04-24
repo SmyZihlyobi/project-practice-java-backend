@@ -1,5 +1,6 @@
 package xyz.demorgan.projectpractice.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -165,5 +166,18 @@ public class CompanyService {
             password.append(chars.charAt(random.nextInt(chars.length())));
         }
         return password.toString();
+    }
+
+    public CompanyDto updateCompany(Long companyId, @Valid CompanyInputDto companyInputDto) {
+        log.info("Updating company with id: {} at {}", companyId, System.currentTimeMillis());
+
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new NotFound("Company with id " + companyId + " not found"));
+
+        companyMapper.updateEntityFromDto(companyInputDto, company);
+
+        Company updatedCompany = companyRepository.save(company);
+
+        return companyMapper.toCompanyDto(updatedCompany);
     }
 }

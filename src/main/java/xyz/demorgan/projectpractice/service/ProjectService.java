@@ -144,4 +144,13 @@ public class ProjectService {
         }
         projectRepository.saveAll(projects);
     }
+
+    public List<ProjectDto> getProjectsByCompany(Long companyId) {
+        log.info("Getting projects by company with id: {} at {}", companyId, System.currentTimeMillis());
+        return projectRepository.findAll()
+                .stream()
+                .filter(project -> project.getCompany().getId().equals(companyId))
+                .map(projectMapper::toProjectDto)
+                .collect(Collectors.toList());
+    }
 }
