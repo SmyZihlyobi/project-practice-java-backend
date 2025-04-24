@@ -30,6 +30,7 @@ input ProjectInput {
 extend type Query {
     project(id: ID!): Project
     projects: [Project!]!
+    getProjectsByCompany(companyId: ID!): [Project!]!
 }
 
 extend type Mutation {
