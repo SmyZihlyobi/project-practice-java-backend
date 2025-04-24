@@ -100,4 +100,16 @@ public class TeamService {
             log.error("Error deleting all teams: {}", e.getMessage());
         }
     }
+
+
+    @Transactional
+    public void deleteEmptyTeams() {
+        log.info("Deleting empty teams at {}", System.currentTimeMillis());
+        List<Team> emptyTeams = teamRepository.findAll().stream()
+                .filter(team -> studentRepository.findAllByTeam(team).isEmpty())
+                .collect(Collectors.toList());
+
+        teamRepository.deleteAll(emptyTeams);
+        log.info("Deleted {} empty teams", emptyTeams.size());
+    }
 }
