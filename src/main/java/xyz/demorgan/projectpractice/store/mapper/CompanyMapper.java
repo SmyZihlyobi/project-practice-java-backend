@@ -1,8 +1,8 @@
 package xyz.demorgan.projectpractice.store.mapper;
 
 import org.mapstruct.*;
-import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.dto.CompanyDto;
+import xyz.demorgan.projectpractice.store.dto.input.CompanyInputDto;
 import xyz.demorgan.projectpractice.store.entity.Company;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {ProjectMapper.class})
@@ -18,4 +18,7 @@ public interface CompanyMapper {
     CompanyDto toCompanyDto(Company company);
 
     Company toEntity(CompanyInputDto companyInputDto);
+
+    void updateEntityFromDto(CompanyInputDto companyInputDto, @MappingTarget Company company);
+
 }
