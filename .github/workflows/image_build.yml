@@ -1,7 +1,7 @@
 name: Build and Push Backend Services
 on:
   push:
-    branches: [ "kubernetes" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -20,12 +20,6 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           driver-opts: network=host
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Build main application
         run: |
