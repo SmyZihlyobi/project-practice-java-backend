@@ -65,6 +65,12 @@ public class ProjectController {
         return projectService.update(id, input, token);
     }
 
+    @PreAuthorize("hasRole('ROLE_COMPANY')")
+    @QueryMapping
+    public List<ProjectDto> getProjectsByCompany(@Argument("companyId") Long companyId) {
+        return projectService.getProjectsByCompany(companyId);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public void deleteProject(@Argument("id") Long id) {
