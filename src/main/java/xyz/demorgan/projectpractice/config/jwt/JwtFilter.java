@@ -36,7 +36,10 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String path = request.getRequestURI();
-        if (path.equals(CompanyAuthController.LOGIN) || path.equals(CompanyAuthController.CHANGE_PASSWORD)) {
+        if (path.equals(CompanyAuthController.LOGIN)
+                || path.equals(CompanyAuthController.CHANGE_PASSWORD)
+                || path.equals("/verify-recaptcha")
+        ) {
             filterChain.doFilter(request, response);
             return;
         }
