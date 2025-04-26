@@ -13,6 +13,7 @@ type Project {
     createdAt: String!
     updatedAt: String!
     companyName: String
+    companyLink: String
 }
 
 input ProjectInput {

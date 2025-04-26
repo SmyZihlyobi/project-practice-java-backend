@@ -10,6 +10,7 @@ public interface ProjectMapper {
     Project toEntity(ProjectDto projectDto);
 
     @Mapping(target = "companyName", source = "company.name")
+    @Mapping(target = "companyLink", source = "company.website")
     ProjectDto toProjectDto(Project project);
 
     Project toEntity(ProjectInputDto projectInputDto);
