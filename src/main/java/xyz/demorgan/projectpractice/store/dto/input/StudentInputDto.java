@@ -15,7 +15,7 @@ public class StudentInputDto {
     private String groupId;
     @NotNull(message = "Курс студента не может быть пустым")
     @Min(value = 1, message = "Курс студента должен быть больше 0")
-    @Max(value = 3, message = "Курс студента должен быть меньше 3")
+    @Max(value = 7, message = "Курс студента должен быть меньше 3")
     private int year;
     @NotBlank(message = "Фамилия студента не может быть пустой")
     private String lastName;

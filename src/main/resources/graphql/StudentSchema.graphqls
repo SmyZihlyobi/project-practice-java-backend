@@ -6,7 +6,7 @@ type Student {
     year: Int!
     lastName: String!
     firstName: String!
-    patronymic: String!
+    patronymic: String
     desiredRole: String
     firstPriority: Int!
     secondPriority: Int!
@@ -25,7 +25,7 @@ input StudentInput {
     year: Int!
     lastName: String!
     firstName: String!
-    patronymic: String!
+    patronymic: String
     desiredRole: String
     firstPriority: Int!
     secondPriority: Int!

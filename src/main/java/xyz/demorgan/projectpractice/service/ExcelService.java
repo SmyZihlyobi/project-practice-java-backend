@@ -157,7 +157,7 @@ public class ExcelService {
         createCell(row, colNum++, student.getTelegram(), style);
 
         // Резюме
-        if (!student.getResumePdf().isEmpty()) {
+        if (student.getResumePdf() != null && !student.getResumePdf().isEmpty()) {
             Cell cell = row.createCell(colNum++);
             cell.setCellValue("прикреплено");
         } else {
