@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -168,6 +169,7 @@ public class CompanyService {
         return password.toString();
     }
 
+    @CacheEvict(value = "projects", allEntries = true)
     public CompanyDto updateCompany(Long companyId, @Valid CompanyInputDto companyInputDto) {
         log.info("Updating company with id: {} at {}", companyId, System.currentTimeMillis());
 
