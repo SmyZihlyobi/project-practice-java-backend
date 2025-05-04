@@ -71,7 +71,7 @@ public class ProjectController {
         return projectService.getProjectsByCompany(companyId);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
     @MutationMapping
     public void deleteProject(@Argument("id") Long id) {
         projectService.delete(id);
@@ -95,7 +95,7 @@ public class ProjectController {
         projectService.unarchiveProject(id);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping
     public void archiveAllProjects() {
         projectService.archiveAllProjects();
