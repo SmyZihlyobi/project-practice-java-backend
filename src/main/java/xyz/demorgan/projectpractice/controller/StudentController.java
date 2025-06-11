@@ -5,8 +5,9 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -17,19 +18,23 @@ import xyz.demorgan.projectpractice.service.StudentService;
 import xyz.demorgan.projectpractice.store.dto.StudentDto;
 import xyz.demorgan.projectpractice.store.dto.input.StudentInputDto;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
-@AllArgsConstructor
+@RequiredArgsConstructor()
 @Controller
 @Validated
-@FieldDefaults(level = PRIVATE, makeFinal = true)
+@FieldDefaults(level = PRIVATE, )
 public class StudentController {
-    StudentService studentService;
-    HttpServletRequest request;
-    Validator validator;
+    final StudentService studentService;
+    final HttpServletRequest request;
+    final Validator validator;
+
+    @Value("${student.registration-deadline}")
+    String registrationDeadline;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COMPANY', 'ROLE_STUDENT')")
     @QueryMapping
@@ -46,6 +51,10 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ROLE_STUDENT')")
     @MutationMapping
     public StudentDto createStudent(@Argument("input") @Valid StudentInputDto studentInputDto) {
+        LocalDate deadline = LocalDate.parse(registrationDeadline);
+        if (LocalDate.now().isAfter(deadline)) {
+            throw new RuntimeException("Регистрация студентов на проект завершена");
+        }
         Set<ConstraintViolation<StudentInputDto>> violations = validator.validate(studentInputDto);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);

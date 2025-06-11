@@ -134,3 +134,7 @@ management:
     metrics:
       export:
         enabled: true
+
+student:
+  registration-deadline: 2025-07-01
+
