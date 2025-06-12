@@ -27,7 +27,7 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor()
 @Controller
 @Validated
-@FieldDefaults(level = PRIVATE, )
+@FieldDefaults(level = PRIVATE)
 public class StudentController {
     final StudentService studentService;
     final HttpServletRequest request;

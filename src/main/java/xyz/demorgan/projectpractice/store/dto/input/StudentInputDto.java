@@ -28,6 +28,7 @@ public class StudentInputDto {
     private int secondPriority;
     @NotNull(message = "Третий приоритет не может быть пустым")
     private int thirdPriority;
+    private String stack;
     private String otherPriorities;
     @NotBlank(message = "Telegram не может быть пустым")
     private String telegram;
