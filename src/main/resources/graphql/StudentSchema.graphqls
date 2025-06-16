@@ -8,6 +8,7 @@ type Student {
     firstName: String!
     patronymic: String
     desiredRole: String
+    stack: String
     firstPriority: Int!
     secondPriority: Int!
     thirdPriority: Int!
@@ -27,6 +28,7 @@ input StudentInput {
     firstName: String!
     patronymic: String
     desiredRole: String
+    stack: String
     firstPriority: Int!
     secondPriority: Int!
     thirdPriority: Int!
